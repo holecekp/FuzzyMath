@@ -17,6 +17,10 @@ public struct Interval
     /// </summary>
     public double Max { get; private set; }
 
+    public double Size => Math.Abs(Max - Min);
+
+    public double Center => (Max + Min) / 2.0;
+
     /// <summary>
     /// Creates a closed interval [min, max].
     /// </summary>
