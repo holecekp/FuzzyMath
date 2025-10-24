@@ -26,6 +26,11 @@ public struct Interval
     /// </summary>
     public Interval(double min, double max)
     {
+        if (max < min)
+        {
+            throw new ArgumentException("The max parameter cannot have a lower value than the min parameter. ");
+        }
+
         Min = min;
         Max = max;
     }
