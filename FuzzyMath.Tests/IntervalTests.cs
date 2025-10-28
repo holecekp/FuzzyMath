@@ -7,7 +7,7 @@ namespace Holecek.FuzzyMath.Tests;
 public sealed class IntervalTests
 {
     [TestMethod]
-    public void Constructor_ForValidInterval_SetsProperties_()
+    public void Constructor_ForValidInterval_SetsProperties()
     {
         var interval = new Interval(1, 2);
 

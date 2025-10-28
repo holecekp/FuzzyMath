@@ -61,14 +61,14 @@ namespace Holecek.FuzzyMath
 
             if (alphaCuts.Count < 2)
             {
-                throw new ArgumentException("AlphaCuts list must contain at least 2 elements (the support and kernel).", nameof(alphaCuts));
+                throw new ArgumentException("Alpha-cuts list must contain at least 2 elements (the support and the kernel).", nameof(alphaCuts));
             }
 
             for (int i = 1; i < alphaCuts.Count; i++)
             {
                 if (!alphaCuts[i - 1].Contains(alphaCuts[i], tolerance: 0))
                 {
-                    throw new ArgumentException($"Invalid alpha-cut value (${alphaCuts[i]}). Each alpha-cut must be a subset of the previous one ({alphaCuts[i - 1]} in this case).", nameof(alphaCuts));
+                    throw new ArgumentException($"Invalid alpha-cut value ({alphaCuts[i]}). Each alpha-cut must be a subset of the previous one ({alphaCuts[i - 1]} in this case).", nameof(alphaCuts));
                 }
             }
         }
