@@ -10,6 +10,8 @@ namespace Holecek.FuzzyMath
     public class FuzzyNumber
     {
         public Interval[] AlphaCuts { get; protected set; }
+        public Interval Support => AlphaCuts.First();
+        public Interval Kernel => AlphaCuts.Last();
 
         /// <summary>
         /// A trapezoidal fuzzy number (supportMin, kernelMin, kernelMax, supportMax)
@@ -22,7 +24,7 @@ namespace Holecek.FuzzyMath
 
             ThrowIfAlphaCutsAreInvalid(
                 AlphaCuts,
-                errorMessageTemplateForInvalidAlphaCut: "The constructor parameters don't define a valid fuzzy number. Kernel [{0}] must be a subset of the support [{1}]");
+                errorMessageTemplateForInvalidAlphaCut: "The constructor parameters don't define a valid fuzzy number. Kernel {0} must be a subset of the support {1}");
         }
 
         /// <summary>

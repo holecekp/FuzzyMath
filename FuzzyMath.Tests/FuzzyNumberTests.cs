@@ -109,4 +109,28 @@ public class FuzzyNumberTests
 
         Assert.Throws<ArgumentException>(() => new FuzzyNumber(singleAlphaCut));
     }
+
+    [TestMethod]
+    public void Support()
+    {
+        const double a = -1;
+        const double b = 2;
+        const double c = 3;
+        const double d = 6;
+        var fuzzyNumber = new FuzzyNumber(a, b, c, d);
+
+        Assert.AreEqual(new Interval(a, d), fuzzyNumber.Support);
+    }
+
+    [TestMethod]
+    public void Kernel()
+    {
+        const double a = -1;
+        const double b = 2;
+        const double c = 3;
+        const double d = 6;
+        var fuzzyNumber = new FuzzyNumber(a, b, c, d);
+
+        Assert.AreEqual(new Interval(b, c), fuzzyNumber.Kernel);
+    }
 }
