@@ -58,6 +58,24 @@ namespace Holecek.FuzzyMath
             AlphaCuts = alphaCutsClone;
         }
 
+        /// <summary>
+        /// Returns an alpha-cut
+        /// </summary>
+        /// <param name="alpha">Value between 0 and 1</param>
+        public Interval GetAlphaCut(double alpha)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns the membership degree for a given number x.
+        /// </summary>
+        /// <returns>Membership degree (a value between 0 and 1)</returns>
+        public double GetMembership(double x)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void ThrowIfAlphaCutsAreInvalid(
             IList<Interval> alphaCuts,
             string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",

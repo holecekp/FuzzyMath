@@ -105,7 +105,7 @@ public class FuzzyNumberTests
     [TestMethod]
     public void Constructor_ForPiecewiseLinearFuzzyNumberWithNotEnoughAlphaCuts_Throw()
     {
-        var singleAlphaCut = new Interval[] { new Interval(-1, 6)};
+        var singleAlphaCut = new Interval[] { new Interval(-1, 6) };
 
         Assert.Throws<ArgumentException>(() => new FuzzyNumber(singleAlphaCut));
     }
@@ -132,5 +132,59 @@ public class FuzzyNumberTests
         var fuzzyNumber = new FuzzyNumber(a, b, c, d);
 
         Assert.AreEqual(new Interval(b, c), fuzzyNumber.Kernel);
+    }
+
+    [TestMethod]
+    public void GetMembership_ForTriangularFuzzyNumberKernel_MustBeOne()
+    {
+        FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
+        const double pointInsideKernel = 2;
+
+        const double expectedMembershipDegree = 1;
+        double actualMembershipDegree = fuzzyNumber.GetMembership(pointInsideKernel);
+        Assert.AreEqual(expectedMembershipDegree, actualMembershipDegree);
+    }
+
+    [TestMethod]
+    [DataRow(2)]
+    [DataRow(2.5)]
+    [DataRow(3)]
+    public void GetMembership_ForTrapeziodalFuzzyNumberKernel_MustBeOne(double pointInsideKernel)
+    {
+        FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3, 4);
+
+        const double expectedMembershipDegree = 1;
+        double actualMembershipDegree = fuzzyNumber.GetMembership(pointInsideKernel);
+        Assert.AreEqual(expectedMembershipDegree, actualMembershipDegree);
+    }
+
+
+    [TestMethod]
+    [DataRow(0.9)]
+    [DataRow(4.1)]
+    public void GetMembership_OutsideSupport_MustBeZero(double pointOutsideSupport)
+    {
+        FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3, 4);
+
+        const double expectedMembershipDegree = 0;
+        double actualMembershipDegree = fuzzyNumber.GetMembership(pointOutsideSupport);
+        Assert.AreEqual(expectedMembershipDegree, actualMembershipDegree);
+    }
+
+    [TestMethod]
+    [DataRow(1, 0)]
+    [DataRow(1.25, 0.25)]
+    [DataRow(1.75, 0.75)]
+    [DataRow(2, 1)]
+    [DataRow(4, 0.5)]
+    [DataRow(4.5, 0.25)]
+    public void GetMembership_InsideSupport(double x, double expectedMembershipDegree)
+    {
+        FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3, 5);
+
+        double actualMembershipDegree = fuzzyNumber.GetMembership(x);
+
+        const double delta = 0.0001;
+        Assert.AreEqual(expectedMembershipDegree, actualMembershipDegree, delta);
     }
 }
