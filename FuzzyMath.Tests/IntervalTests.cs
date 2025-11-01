@@ -44,5 +44,4 @@ public sealed class IntervalTests
 
         Assert.AreEqual(expectedCenter, actualCenter);
     }
-
 }

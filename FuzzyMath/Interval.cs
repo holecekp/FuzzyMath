@@ -59,4 +59,10 @@ public struct Interval
     {
         return $"[{Min}, {Max}]";
     }
+
+    public void Deconstruct(out double min, out double max)
+    {
+        min = Min;
+        max = Max;
+    }
 }
