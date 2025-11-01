@@ -19,6 +19,10 @@ namespace Holecek.FuzzyMath
             var support = new Interval(supportMin, supportMax);
             var kernel = new Interval(kernelMin, kernelMax);
             AlphaCuts = new Interval[] { support, kernel };
+
+            ThrowIfAlphaCutsAreInvalid(
+                AlphaCuts,
+                errorMessageTemplateForInvalidAlphaCut: "The constructor parameters don't define a valid fuzzy number. Kernel [{0}] must be a subset of the support [{1}]");
         }
 
         /// <summary>
@@ -52,23 +56,26 @@ namespace Holecek.FuzzyMath
             AlphaCuts = alphaCutsClone;
         }
 
-        private static void ThrowIfAlphaCutsAreInvalid(IList<Interval> alphaCuts)
+        private static void ThrowIfAlphaCutsAreInvalid(
+            IList<Interval> alphaCuts,
+            string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",
+            string errorMessageTemplateForInvalidAlphaCut = "Invalid alpha-cut value ({0}). Each alpha-cut must be a subset of the previous one ({1}) in this case).")
         {
             if (alphaCuts == null)
             {
-                throw new ArgumentNullException(nameof(alphaCuts));
+                throw new ArgumentNullException();
             }
 
             if (alphaCuts.Count < 2)
             {
-                throw new ArgumentException("Alpha-cuts list must contain at least 2 elements (the support and the kernel).", nameof(alphaCuts));
+                throw new ArgumentException(errorMessageForNotEnoughAlphaCuts);
             }
 
             for (int i = 1; i < alphaCuts.Count; i++)
             {
                 if (!alphaCuts[i - 1].Contains(alphaCuts[i], tolerance: 0))
                 {
-                    throw new ArgumentException($"Invalid alpha-cut value ({alphaCuts[i]}). Each alpha-cut must be a subset of the previous one ({alphaCuts[i - 1]} in this case).", nameof(alphaCuts));
+                    throw new ArgumentException(String.Format(errorMessageTemplateForInvalidAlphaCut, alphaCuts[i], alphaCuts[i - 1]));
                 }
             }
         }
