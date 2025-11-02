@@ -68,13 +68,43 @@ namespace Holecek.FuzzyMath
         }
 
         /// <summary>
-        /// Returns the membership degree for a given number x.
+        /// Returns the membership degree for a given element x.
         /// </summary>
-        /// <returns>Membership degree (a value between 0 and 1)</returns>
+        /// <returns>Membership degree of the element x (a number between 0 and 1)</returns>
         public double GetMembership(double x)
         {
-            throw new NotImplementedException();
+            if (!Support.Contains(x))
+            {
+                return 0;
+            }
+
+            if (Kernel.Contains(x))
+            {
+                return 1;
+            }
+
+            int lowerAlphaCutIndex = GetHighestAlphaCutIndexContainingValue(x);
+            int higherAlphaCutIndex = lowerAlphaCutIndex + 1;
+
+            Interval lowerAlphaCut = AlphaCuts[lowerAlphaCutIndex];
+            Interval higherAlphaCut = AlphaCuts[higherAlphaCutIndex];
+
+            double alphaStep = 1 / (double)(AlphaCuts.Length - 1);
+            double lowerAlpha = lowerAlphaCutIndex * alphaStep;
+
+            double ratio;
+            if (x < higherAlphaCut.Min)
+            {
+                ratio = (x - lowerAlphaCut.Min) / (higherAlphaCut.Min - lowerAlphaCut.Min);
+            }
+            else
+            {
+                ratio = (lowerAlphaCut.Max - x) / (lowerAlphaCut.Max - higherAlphaCut.Max);
+            }
+
+            return lowerAlpha + ratio * alphaStep;
         }
+
 
         private static void ThrowIfAlphaCutsAreInvalid(
             IList<Interval> alphaCuts,
@@ -98,6 +128,24 @@ namespace Holecek.FuzzyMath
                     throw new ArgumentException(String.Format(errorMessageTemplateForInvalidAlphaCut, alphaCuts[i], alphaCuts[i - 1]));
                 }
             }
+        }
+
+        private int GetHighestAlphaCutIndexContainingValue(double value)
+        {
+            if (!Support.Contains(value))
+            {
+                throw new InvalidOperationException("No alpha-cut contains the value.");
+            }
+
+            for (int i = 1; i < AlphaCuts.Length; i++)
+            {
+                if (!AlphaCuts[i].Contains(value))
+                {
+                    return i - 1;
+                }
+            }
+
+            return 0;
         }
     }
 }
