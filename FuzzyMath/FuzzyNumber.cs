@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Holecek.FuzzyMath
@@ -64,7 +65,36 @@ namespace Holecek.FuzzyMath
         /// <param name="alpha">Value between 0 and 1</param>
         public Interval GetAlphaCut(double alpha)
         {
-            throw new NotImplementedException();
+            if (alpha == 0)
+            {
+                return Support;
+            }
+
+            if (alpha == 1)
+            {
+                return Kernel;
+            }
+
+            if (alpha < 0 || alpha > 1 || double.IsNaN(alpha))
+            {
+                throw new ArgumentOutOfRangeException(nameof(alpha), "Alpha must a number be between 0 a 1.");
+            }
+
+            double alphaCutsSteps = 1.0 / (double)(AlphaCuts.Length - 1);
+
+            int lowerAlphaCutIndex = (int)Math.Floor(alpha / alphaCutsSteps);
+            int higherAlphaCutIndex = lowerAlphaCutIndex + 1;
+
+            double lowerAlpha = (double)lowerAlphaCutIndex * alphaCutsSteps;
+            double ratio = (alpha - lowerAlpha) / alphaCutsSteps;
+
+            Interval lowerAlphaCut = AlphaCuts[lowerAlphaCutIndex];
+            Interval higherAlphaCut = AlphaCuts[higherAlphaCutIndex];
+
+            double resultMin = lowerAlphaCut.Min + ratio * (higherAlphaCut.Min - lowerAlphaCut.Min);
+            double resultMax = lowerAlphaCut.Max - ratio * (lowerAlphaCut.Max - higherAlphaCut.Max);
+
+            return new Interval(resultMin, resultMax);
         }
 
         /// <summary>
