@@ -55,6 +55,18 @@ public struct Interval
         return (interval.Min + tolerance >= Min) && (interval.Max - tolerance <= Max);
     }
 
+    /// <summary>
+    /// Returns the interval modifed so that it would lie inside the <paramref name="universe"/> interval.
+    /// If the interval lies completely outside the universe, the nearest valid interval within the <paramref name="universe"/>
+    /// is returned.
+    /// </summary>
+    public Interval RestrictTo(Interval universe)
+    {
+        double restrictedMin = Math.Min(Math.Max(Min, universe.Min), universe.Max);
+        double restrictedMax = Math.Max(Math.Min(Max, universe.Max), universe.Min);
+        return new Interval(restrictedMin, restrictedMax);
+    }
+
     public override string ToString()
     {
         return $"[{Min}, {Max}]";
