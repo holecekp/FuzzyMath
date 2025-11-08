@@ -1,10 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Holecek.FuzzyMath.Tests;
+﻿namespace Holecek.FuzzyMath.Tests;
 
 [TestClass]
-public sealed class IntervalTests
+public class IntervalTests
 {
     [TestMethod]
     public void Constructor_ForValidInterval_SetsProperties()

@@ -28,7 +28,7 @@ public struct Interval
     {
         if (max < min)
         {
-            throw new ArgumentException("The max parameter cannot have a lower value than the min parameter. ");
+            throw new ArgumentException("The max parameter cannot have a lower value than the min parameter.");
         }
 
         Min = min;
@@ -67,10 +67,7 @@ public struct Interval
         return new Interval(restrictedMin, restrictedMax);
     }
 
-    public override string ToString()
-    {
-        return $"[{Min}, {Max}]";
-    }
+    public override string ToString() => $"[{Min}, {Max}]";
 
     public void Deconstruct(out double min, out double max)
     {
