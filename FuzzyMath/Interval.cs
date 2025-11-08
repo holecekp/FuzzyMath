@@ -76,7 +76,18 @@ public struct Interval
     }
 
     public static Interval operator +(Interval a, Interval b) => IntervalArithmetic.Add(a, b);
+    public static Interval operator +(Interval a, double b) => IntervalArithmetic.Add(a, b);
+    public static Interval operator +(double a, Interval b) => IntervalArithmetic.Add(a, b);
+
     public static Interval operator -(Interval a, Interval b) => IntervalArithmetic.Subtract(a, b);
+    public static Interval operator -(Interval a, double b) => IntervalArithmetic.Subtract(a, b);
+    public static Interval operator -(double a, Interval b) => IntervalArithmetic.Subtract(a, b);
+
     public static Interval operator *(Interval a, Interval b) => IntervalArithmetic.Multiply(a, b);
+    public static Interval operator *(Interval a, double b) => IntervalArithmetic.Multiply(a, b);
+    public static Interval operator *(double a, Interval b) => IntervalArithmetic.Multiply(a, b);
+
     public static Interval operator /(Interval a, Interval b) => IntervalArithmetic.Divide(a, b);
+    public static Interval operator /(Interval a, double b) => IntervalArithmetic.Divide(a, b);
+    public static Interval operator /(double a, Interval b) => IntervalArithmetic.Divide(a, b);
 }

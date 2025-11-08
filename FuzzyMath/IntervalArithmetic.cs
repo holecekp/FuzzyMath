@@ -10,6 +10,10 @@ public static class IntervalArithmetic
         return new Interval(a.Min + b.Min, a.Max + b.Max);
     }
 
+    public static Interval Add(Interval a, double b) => Add(a, DoubleToInterval(b));
+
+    public static Interval Add(double a, Interval b) => Add(DoubleToInterval(a), b);
+
     /// <summary>
     /// Subtracts two intervals.
     /// </summary>
@@ -17,6 +21,10 @@ public static class IntervalArithmetic
     {
         return new Interval(a.Min - b.Max, a.Max - b.Min);
     }
+
+    public static Interval Subtract(Interval a, double b) => Subtract(a, DoubleToInterval(b));
+
+    public static Interval Subtract(double a, Interval b) => Subtract(DoubleToInterval(a), b);
 
     /// <summary>
     /// Multiplies two intervals.
@@ -32,6 +40,10 @@ public static class IntervalArithmetic
             Math.Min(Math.Min(c1, c2), Math.Min(c3, c4)),
             Math.Max(Math.Max(c1, c2), Math.Max(c3, c4)));
     }
+
+    public static Interval Multiply(Interval a, double b) => Multiply(a, DoubleToInterval(b));
+
+    public static Interval Multiply(double a, Interval b) => Multiply(DoubleToInterval(a), b);
 
     /// <summary>
     /// Divides two intervals.
@@ -54,6 +66,10 @@ public static class IntervalArithmetic
             Math.Max(Math.Max(c1, c2), Math.Max(c3, c4)));
     }
 
+    public static Interval Divide(Interval a, double b) => Divide(a, DoubleToInterval(b));
+
+    public static Interval Divide(double a, Interval b) => Divide(DoubleToInterval(a), b);
+
     /// <summary>
     /// Negation of an interval (the sign of both bounds is changed).
     /// </summary>
@@ -70,4 +86,6 @@ public static class IntervalArithmetic
         var one = new Interval(1.0, 1.0);
         return Divide(one, interval);
     }
+
+    private static Interval DoubleToInterval(double number) => new Interval(number, number);
 }
