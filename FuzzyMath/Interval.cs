@@ -77,4 +77,9 @@ public struct Interval
         min = Min;
         max = Max;
     }
+
+    public static Interval operator +(Interval a, Interval b) => IntervalArithmetic.Add(a, b);
+    public static Interval operator -(Interval a, Interval b) => IntervalArithmetic.Subtract(a, b);
+    public static Interval operator *(Interval a, Interval b) => IntervalArithmetic.Multiply(a, b);
+    public static Interval operator /(Interval a, Interval b) => IntervalArithmetic.Divide(a, b);
 }
