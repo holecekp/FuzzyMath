@@ -1,6 +1,6 @@
 ﻿namespace Holecek.FuzzyMath;
 
-public static class IntervalArithemtic
+public static class IntervalArithmetic
 {
     /// <summary>
     /// Adds two intervals.
