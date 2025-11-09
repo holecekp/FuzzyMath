@@ -135,6 +135,35 @@ namespace Holecek.FuzzyMath
             return lowerAlpha + ratio * alphaStep;
         }
 
+        /// <summary>
+        /// Creates a copy of this fuzzy number with a different number of alpha-cuts. The minimum number of alpha-cuts is 2.
+        /// </summary>
+        /// <remarks>
+        /// This is especially useful if you need to perform operations on multiple fuzzy numbers, which requires all of them to have the same
+        /// number of alpha-cuts.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The exception is thrown if the new nuber of alpha-cuts is less than 2.</exception>
+        public FuzzyNumber WithAlphaCutsCount(int newAlphaCutsCount)
+        {
+            if (newAlphaCutsCount < 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(newAlphaCutsCount), "The number of alpha-cuts must be at least 2.");
+            }
+
+            if (newAlphaCutsCount == AlphaCuts.Length)
+            {
+                return new FuzzyNumber(AlphaCuts);
+            }
+
+            var alphaCuts = new Interval[newAlphaCutsCount];
+            for (int i = 0; i < newAlphaCutsCount; i++)
+            {
+                double alpha = i / (double)(newAlphaCutsCount - 1);
+                alphaCuts[i] = GetAlphaCut(alpha);
+            }
+
+            return new FuzzyNumber(alphaCuts);
+        }
 
         private static void ThrowIfAlphaCutsAreInvalid(
             IList<Interval> alphaCuts,

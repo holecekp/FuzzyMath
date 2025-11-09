@@ -224,4 +224,47 @@ public class FuzzyNumberTests
         const double delta = 0.0001;
         Assert.AreEqual(expectedMembershipDegree, actualMembershipDegree, delta);
     }
+
+    [TestMethod]
+    public void WithAlphaCutsCount_ForSameNumberOfAlphaCuts_AlphaCutsAreNotChanged()
+    {
+        var originalFuzzyNumber = new FuzzyNumber(1, 2, 3, 5);
+        int originalAlphaCutsCount = originalFuzzyNumber.AlphaCuts.Length;
+
+        var modifiedFuzzyNumber = originalFuzzyNumber.WithAlphaCutsCount(originalAlphaCutsCount);
+
+        Assert.HasCount(originalAlphaCutsCount, modifiedFuzzyNumber.AlphaCuts);
+        Assert.AreEqual(originalFuzzyNumber.AlphaCuts[0], originalFuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(originalFuzzyNumber.AlphaCuts[1], originalFuzzyNumber.AlphaCuts[1]);
+    }
+
+    [TestMethod]
+    public void WithAlphaCutsCount_ForDifferentNumberOfAlphaCuts_AlphaCutsAreChanged()
+    {
+        var originalFuzzyNumber = new FuzzyNumber(1, 2, 3, 5);
+
+        const int newAlphaCutsCount = 3;
+        Interval[] expectedModifiedAlphaCuts =
+        [
+            new Interval(1, 5),
+            new Interval(1.5, 4),
+            new Interval(2, 3)
+        ];
+
+        var modifiedFuzzyNumber = originalFuzzyNumber.WithAlphaCutsCount(newAlphaCutsCount);
+
+        Assert.HasCount(expectedModifiedAlphaCuts.Length, modifiedFuzzyNumber.AlphaCuts);
+        Assert.AreEqual(expectedModifiedAlphaCuts[0], modifiedFuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(expectedModifiedAlphaCuts[1], modifiedFuzzyNumber.AlphaCuts[1]);
+        Assert.AreEqual(expectedModifiedAlphaCuts[2], modifiedFuzzyNumber.AlphaCuts[2]);
+    }
+
+    [TestMethod]
+    public void WithAlphaCutsCount_ForInvalidNumberOfAlphaCuts_Throws()
+    {
+        var originalFuzzyNumber = new FuzzyNumber(1, 2, 3, 5);
+        var newInvalidAlphaCutsCount = 1;
+
+        Assert.Throws<ArgumentException>(() => originalFuzzyNumber.WithAlphaCutsCount(newInvalidAlphaCutsCount));
+    }
 }
