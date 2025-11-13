@@ -83,7 +83,7 @@ public class FuzzyNumberTests
         var alphaCut1 = new Interval(-1, 6);
         var alphaCut2 = new Interval(0, 4);
         var alphaCut3 = new Interval(2, 3);
-        var fuzzyNumber = new FuzzyNumber(new Interval[] { alphaCut1, alphaCut2, alphaCut3 });
+        var fuzzyNumber = new FuzzyNumber([ alphaCut1, alphaCut2, alphaCut3 ]);
 
         Assert.HasCount(3, fuzzyNumber.AlphaCuts);
         Assert.AreEqual(alphaCut1, fuzzyNumber.AlphaCuts[0]);
