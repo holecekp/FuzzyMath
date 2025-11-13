@@ -5,24 +5,24 @@ An open source library for basic operations with fuzzy numbers. It supports piec
 ## Create fuzzy number
 
 Using  `FuzzyNumber` class constructor, you can create various common types of fuzzy numbers. A triangular fuzzy number can be created by passing three values to the constructor:
-```csahrp
+```csharp
 var triangular = new FuzzyNumber(1, 2, 3);
 ```
 
 A trapezoidal fuzzy number is created by passing four values:
-```csahrp
+```csharp
 var trapeziodal = new FuzzyNumber(1, 2, 3, 4);
 ```
 
 Providing just two values creates a fuzzy representation of a closed interval, and similarly, passing just a single numeric value
 creates a fuzzy representation of a crisp number:
-```csahrp
+```csharp
 var interval = new FuzzyNumber(5, 6);
 var crisp = new FuzzyNumber(7);
 ```
 
 Another way is to provide the list of α-cuts in the order from support to the kernel:
-```csahrp
+```csharp
 var fuzzyNumber = new FuzzyNumber([
     new Interval(0, 7),
     new Interval(1, 6),
@@ -35,7 +35,7 @@ To define a valid fuzzy number, the list of α-cuts must have at least 2 items a
 
 ### Get an α-cut
 An α-cut of a fuzzy number can be calculated by `GetAlphaCut` method for any value of α in [0, 1]. For example:
-```csahrp
+```csharp
 FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
 Interval alphaCut = fuzzyNumber.GetAlphaCut(0.75);
 ```
@@ -45,7 +45,7 @@ much easier.
 
 ### Get membership degree
 The membership degree of an element is calculated by `GetMembership`. For example:
-```csahrp
+```csharp
 FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
 double alpha = fuzzyNumber.GetMembershi(1.5);
 ```
@@ -56,24 +56,24 @@ An open source library for basic operations with fuzzy numbers. It supports piec
 ## Create fuzzy number
 
 Using  `FuzzyNumber` class constructor, you can create various common types of fuzzy numbers. A triangular fuzzy number can be created by passing three values to the constructor:
-```csahrp
+```csharp
 var triangular = new FuzzyNumber(1, 2, 3);
 ```
 
 A trapezoidal fuzzy number is created by passing four values:
-```csahrp
+```csharp
 var trapeziodal = new FuzzyNumber(1, 2, 3, 4);
 ```
 
 Providing just two values creates a fuzzy representation of a closed interval, and similarly, passing just a single numeric value
 creates a fuzzy representation of a crisp number:
-```csahrp
+```csharp
 var interval = new FuzzyNumber(5, 6);
 var crisp = new FuzzyNumber(7);
 ```
 
 Another way is to provide the list of α-cuts in the order from support to the kernel:
-```csahrp
+```csharp
 var fuzzyNumber = new FuzzyNumber([
     new Interval(0, 7),
     new Interval(1, 6),
@@ -86,7 +86,7 @@ To define a valid fuzzy number, the list of α-cuts must have at least 2 items a
 
 ### Get an α-cut
 An α-cut of a fuzzy number can be calculated by `GetAlphaCut` method for any value of α in [0, 1]. For example:
-```csahrp
+```csharp
 FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
 Interval alphaCut = fuzzyNumber.GetAlphaCut(0.75);
 ```
@@ -96,7 +96,7 @@ much easier.
 
 ### Get membership degree
 The membership degree of an element is calculated by `GetMembership`. For example:
-```csahrp
+```csharp
 FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
 double alpha = fuzzyNumber.GetMembership(1.5);
 ```
