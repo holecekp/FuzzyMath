@@ -105,7 +105,7 @@ public class FuzzyNumberTests
     [TestMethod]
     public void Constructor_ForPiecewiseLinearFuzzyNumberWithNotEnoughAlphaCuts_Throw()
     {
-        var singleAlphaCut = new Interval[] { new Interval(-1, 6) };
+        var singleAlphaCut = new[] { new Interval(-1, 6) };
 
         Assert.Throws<ArgumentException>(() => new FuzzyNumber(singleAlphaCut));
     }
@@ -266,5 +266,46 @@ public class FuzzyNumberTests
         var newInvalidAlphaCutsCount = 1;
 
         Assert.Throws<ArgumentException>(() => originalFuzzyNumber.WithAlphaCutsCount(newInvalidAlphaCutsCount));
+    }
+
+
+    [TestMethod]
+    public void FromAlphaCutFunction_FunctionUsingAlphaValue()
+    {
+        const int AlphaCutCount = 3;
+        var expectedSupport = new Interval(2, 10);
+        var expectedMiddleAlphaCut = new Interval(3.5, 9);
+        var expectedKernel = new Interval(5, 8);
+
+        var fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
+            AlphaCutCount,
+            (alphaCutIndex, alpha) => new Interval(
+                2 + 3 * alpha,
+                10 - 2 * alpha));
+
+        Assert.HasCount(AlphaCutCount, fuzzyNumber.AlphaCuts);
+        Assert.AreEqual(expectedSupport, fuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(expectedMiddleAlphaCut, fuzzyNumber.AlphaCuts[1]);
+        Assert.AreEqual(expectedKernel, fuzzyNumber.AlphaCuts[2]);
+    }
+
+    [TestMethod]
+    public void FromAlphaCutFunction_FunctionUsingAlphCutIndex()
+    {
+        const int AlphaCutCount = 3;
+        var expectedSupport = new Interval(2, 10);
+        var expectedMiddleAlphaCut = new Interval(3, 9);
+        var expectedKernel = new Interval(4, 8);
+
+        var fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
+            AlphaCutCount,
+            (alphaCutIndex, alpha) => new Interval(
+                2 + alphaCutIndex,
+                10 - alphaCutIndex));
+
+        Assert.HasCount(AlphaCutCount, fuzzyNumber.AlphaCuts);
+        Assert.AreEqual(expectedSupport, fuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(expectedMiddleAlphaCut, fuzzyNumber.AlphaCuts[1]);
+        Assert.AreEqual(expectedKernel, fuzzyNumber.AlphaCuts[2]);
     }
 }

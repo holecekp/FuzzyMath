@@ -165,6 +165,34 @@ namespace Holecek.FuzzyMath
             return new FuzzyNumber(alphaCuts);
         }
 
+        public static FuzzyNumber FromAlphaCutFunction(int alphaCutCount, Func<int, double, Interval> getAlphaCutFunction)
+        {
+            double alphaCutsStep = 1.0 / (double)(alphaCutCount - 1);
+            var alphaCuts = new Interval[alphaCutCount];
+
+            for (int i = 0; i < alphaCutCount; i++)
+            {
+                double alpha = i * alphaCutsStep;
+                var alphaCut = getAlphaCutFunction(i, alpha);
+
+                // Each alpha-cut must be a subinterval of the previous one. If this condition doesn't hold,
+                // modify the alpha-cut so that the condition wouldn't be broken. This can happen because
+                // of limited 
+                if (i > 0)
+                {
+                    var previousAlphaCut = alphaCuts[i - 1];
+                    if (!previousAlphaCut.Contains(alphaCut, tolerance: 0))
+                    {
+                        alphaCut = alphaCut.RestrictTo(previousAlphaCut);
+                    }
+                }
+
+                alphaCuts[i] = alphaCut;
+            }
+
+            return new FuzzyNumber(alphaCuts);
+        }
+
         private static void ThrowIfAlphaCutsAreInvalid(
             IList<Interval> alphaCuts,
             string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",
