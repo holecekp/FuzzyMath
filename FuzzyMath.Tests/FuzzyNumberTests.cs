@@ -308,4 +308,55 @@ public class FuzzyNumberTests
         Assert.AreEqual(expectedMiddleAlphaCut, fuzzyNumber.AlphaCuts[1]);
         Assert.AreEqual(expectedKernel, fuzzyNumber.AlphaCuts[2]);
     }
+
+
+    [TestMethod]
+    public void FromFuzzyNumberOperation_UnaryOperation()
+    {
+        var originalFuzzyNumber = new FuzzyNumber(2, 4, 6, 8);
+
+        var resultingFuzzyNumber = FuzzyNumber.FromFuzzyNumberOperation(
+            originalFuzzyNumber,
+            alphaCut => alphaCut + 5);
+
+        Assert.HasCount(originalFuzzyNumber.AlphaCuts.Length, resultingFuzzyNumber.AlphaCuts);
+        Assert.AreEqual(new Interval(7, 13), resultingFuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(new Interval(9, 11), resultingFuzzyNumber.AlphaCuts[1]);
+    }
+
+    [TestMethod]
+    public void FromFuzzyNumberOperation_BinaryOperationSameNumberOfAlphaCuts()
+    {
+        const int ExpectedAlphaCutCount = 2;
+        var firstFuzzyNumber = new FuzzyNumber(2, 4, 6);
+        var secondFuzzyNumber = new FuzzyNumber(1, 2, 3);
+
+        var resultingFuzzyNumber = FuzzyNumber.FromFuzzyNumberOperation(
+            firstFuzzyNumber,
+            secondFuzzyNumber,
+            (firstAlphaCut, secondAlphaCut) => firstAlphaCut + secondAlphaCut);
+
+        Assert.HasCount(ExpectedAlphaCutCount, resultingFuzzyNumber.AlphaCuts);
+        Assert.AreEqual(new Interval(3, 9), resultingFuzzyNumber.AlphaCuts[0]);
+        Assert.AreEqual(new Interval(6, 6), resultingFuzzyNumber.AlphaCuts[1]);
+    }
+
+    [TestMethod]
+    public void FromFuzzyNumberOperation_BinaryOperationDifferentNumberOfAlphaCuts()
+    {
+        const int AlphaCutCountForResult = 3;
+        var firstFuzzyNumber = new FuzzyNumber(2, 4, 6).WithAlphaCutsCount(5);
+        var secondFuzzyNumber = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(7);
+
+        var result = FuzzyNumber.FromFuzzyNumberOperation(
+            firstFuzzyNumber,
+            secondFuzzyNumber,
+            (firstAlphaCut, secondAlphaCut) => firstAlphaCut + secondAlphaCut,
+            fallbackAlphaCutsCount: AlphaCutCountForResult);
+
+        Assert.HasCount(AlphaCutCountForResult, result.AlphaCuts);
+        Assert.AreEqual(new Interval(3, 9), result.AlphaCuts[0]);
+        Assert.AreEqual(new Interval(4.5, 7.5), result.AlphaCuts[1]);
+        Assert.AreEqual(new Interval(6, 6), result.AlphaCuts[2]);
+    }
 }

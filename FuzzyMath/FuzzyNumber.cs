@@ -177,7 +177,7 @@ namespace Holecek.FuzzyMath
 
                 // Each alpha-cut must be a subinterval of the previous one. If this condition doesn't hold,
                 // modify the alpha-cut so that the condition wouldn't be broken. This can happen because
-                // of limited 
+                // of limited accuracy of floating point numbers operations.
                 if (i > 0)
                 {
                     var previousAlphaCut = alphaCuts[i - 1];
@@ -191,6 +191,30 @@ namespace Holecek.FuzzyMath
             }
 
             return new FuzzyNumber(alphaCuts);
+        }
+
+        public static FuzzyNumber FromFuzzyNumberOperation(FuzzyNumber fuzzyNumber, Func<Interval, Interval> alphaCutsUnaryOperation)
+        {
+            return FromAlphaCutFunction(
+                fuzzyNumber.AlphaCuts.Length,
+                (alphaCutIndex, alpha) => alphaCutsUnaryOperation(fuzzyNumber.AlphaCuts[alphaCutIndex]));
+        }
+
+        public static FuzzyNumber FromFuzzyNumberOperation(
+            FuzzyNumber fuzzyNumber,
+            FuzzyNumber fuzzyNumber2,
+            Func<Interval, Interval, Interval> alphaCutsBinaryOperation,
+            int fallbackAlphaCutsCount = 60)
+        {
+            if (fuzzyNumber.AlphaCuts.Length != fuzzyNumber2.AlphaCuts.Length)
+            {
+                fuzzyNumber = fuzzyNumber.WithAlphaCutsCount(fallbackAlphaCutsCount);
+                fuzzyNumber2 = fuzzyNumber2.WithAlphaCutsCount(fallbackAlphaCutsCount);
+            }
+
+            return FromAlphaCutFunction(
+                fuzzyNumber.AlphaCuts.Length,
+                (alphaCutIndex, alpha) => alphaCutsBinaryOperation(fuzzyNumber.AlphaCuts[alphaCutIndex], fuzzyNumber2.AlphaCuts[alphaCutIndex]));
         }
 
         private static void ThrowIfAlphaCutsAreInvalid(
