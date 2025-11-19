@@ -23,7 +23,7 @@ namespace Holecek.FuzzyMath
             var kernel = new Interval(kernelMin, kernelMax);
             AlphaCuts = new Interval[] { support, kernel };
 
-            ThrowIfAlphaCutsAreInvalid(
+            AlphaCutsHelper.ThrowIfAlphaCutsAreInvalid(
                 AlphaCuts,
                 errorMessageTemplateForInvalidAlphaCut: "The constructor parameters don't define a valid fuzzy number. Kernel {0} must be a subset of the support {1}");
         }
@@ -51,7 +51,7 @@ namespace Holecek.FuzzyMath
         /// </summary>
         public FuzzyNumber(IList<Interval> alphaCuts)
         {
-            ThrowIfAlphaCutsAreInvalid(alphaCuts);
+            AlphaCutsHelper.ThrowIfAlphaCutsAreInvalid(alphaCuts);
 
             var alphaCutsClone = new Interval[alphaCuts.Count];
             alphaCuts.CopyTo(alphaCutsClone, 0);
@@ -113,7 +113,7 @@ namespace Holecek.FuzzyMath
                 return 1;
             }
 
-            int lowerAlphaCutIndex = GetHighestAlphaCutIndexContainingValue(x);
+            int lowerAlphaCutIndex = AlphaCutsHelper.GetHighestAlphaCutIndexContainingValue(AlphaCuts, x);
             int higherAlphaCutIndex = lowerAlphaCutIndex + 1;
 
             Interval lowerAlphaCut = AlphaCuts[lowerAlphaCutIndex];
@@ -247,48 +247,6 @@ namespace Holecek.FuzzyMath
             return FromAlphaCutFunction(
                 firstInput.AlphaCuts.Length,
                 (alphaCutIndex, alpha) => alphaCutsBinaryOperation(firstInput.AlphaCuts[alphaCutIndex], secondInput.AlphaCuts[alphaCutIndex]));
-        }
-
-        private static void ThrowIfAlphaCutsAreInvalid(
-            IList<Interval> alphaCuts,
-            string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",
-            string errorMessageTemplateForInvalidAlphaCut = "Invalid alpha-cut value ({0}). Each alpha-cut must be a subset of the previous one ({1}) in this case).")
-        {
-            if (alphaCuts == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (alphaCuts.Count < 2)
-            {
-                throw new ArgumentException(errorMessageForNotEnoughAlphaCuts);
-            }
-
-            for (int i = 1; i < alphaCuts.Count; i++)
-            {
-                if (!alphaCuts[i - 1].Contains(alphaCuts[i], tolerance: 0))
-                {
-                    throw new ArgumentException(String.Format(errorMessageTemplateForInvalidAlphaCut, alphaCuts[i], alphaCuts[i - 1]));
-                }
-            }
-        }
-
-        private int GetHighestAlphaCutIndexContainingValue(double value)
-        {
-            if (!Support.Contains(value))
-            {
-                throw new InvalidOperationException("No alpha-cut contains the value.");
-            }
-
-            for (int i = 1; i < AlphaCuts.Length; i++)
-            {
-                if (!AlphaCuts[i].Contains(value))
-                {
-                    return i - 1;
-                }
-            }
-
-            return 0;
         }
     }
 }
