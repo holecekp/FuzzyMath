@@ -43,6 +43,24 @@ public class IntervalTests
     }
 
     [TestMethod]
+    [DataRow(-1, 2, 0, true)]
+    [DataRow(-1, 2, 0.11, true)]
+    [DataRow(-1, 2.1, 0.11, true)]
+    [DataRow(-1, 1.9, 0.11, true)]
+    [DataRow(-1.1, 1.91, 0.11, true)]
+    [DataRow(-0.9, 1.9, 0.11, true)]
+    [DataRow(-0.9, 1.9, 0, false)]
+    [DataRow(-0.9, 1.9, 0.05, false)]
+    public void IsEqualTo(double inputMin, double inputMax, double tolerance, bool expectedEqualityResult)
+    {
+        var interval = new Interval(-1, 2);
+        var otherIterval = new Interval(inputMin, inputMax);
+
+        bool equalityResult = interval.IsEqualTo(otherIterval, tolerance);
+        Assert.AreEqual(expectedEqualityResult, equalityResult);
+    }
+
+    [TestMethod]
     [DataRow(-1, 2)]
     [DataRow(0, 1)]
     [DataRow(2, 2)]

@@ -50,9 +50,19 @@ public struct Interval
     /// </summary>
     /// <param name="interval">An interval</param>
     /// <param name="tolerance">An optional tolerance that will be used for the comparison</param>
-    public bool Contains(Interval interval, double tolerance)
+    public bool Contains(Interval interval, double tolerance = 0)
     {
         return (interval.Min + tolerance >= Min) && (interval.Max - tolerance <= Max);
+    }
+
+    /// <summary>
+    /// Verifies if this interval is equal to the <paramref name="other"/> interval.
+    /// </summary>
+    /// <param name="other">An other interval</param>
+    /// <param name="tolerance">An optional tolerance that will be used for the comparison</param>
+    public bool IsEqualTo(Interval other, double tolerance = 0)
+    {
+        return Math.Abs(Min - other.Min) <= tolerance && Math.Abs(Max - other.Max) <= tolerance;
     }
 
     /// <summary>

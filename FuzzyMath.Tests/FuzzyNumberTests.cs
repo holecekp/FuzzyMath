@@ -268,6 +268,50 @@ public class FuzzyNumberTests
         Assert.Throws<ArgumentException>(() => originalFuzzyNumber.WithAlphaCutsCount(newInvalidAlphaCutsCount));
     }
 
+    [TestMethod]
+    public void IsEqualTo_SameFuzzyNumber_ReturnsTrue()
+    {
+        const double Tolerance = 0.001;
+        var fuzzyNumber = new FuzzyNumber(1, 2, 3, 4);
+        var otherFuzzyNumber = new FuzzyNumber(1, 2, 3, 4);
+
+        bool areEqual = fuzzyNumber.IsEqualTo(otherFuzzyNumber, Tolerance);
+        Assert.IsTrue(areEqual);
+    }
+
+    [TestMethod]
+    public void IsEqualTo_SameFuzzyNumberWithDifferentAlhaCutsCout_ReturnsTrue()
+    {
+        const double Tolerance = 0.001;
+        var fuzzyNumber = new FuzzyNumber(1, 2, 3, 4).WithAlphaCutsCount(15);
+        var otherFuzzyNumber = new FuzzyNumber(1, 2, 3, 4).WithAlphaCutsCount(17);
+
+        bool areEqual = fuzzyNumber.IsEqualTo(otherFuzzyNumber, Tolerance);
+        Assert.IsTrue(areEqual);
+    }
+
+    [TestMethod]
+    public void IsEqualTo_DifferentFuzzyNumber()
+    {
+        var fuzzyNumber = new FuzzyNumber(1, 2, 3, 4);
+        var otherFuzzyNumber = new FuzzyNumber(5, 6, 7, 8);
+
+        bool areEqual = fuzzyNumber.IsEqualTo(otherFuzzyNumber, tolerance: 0);
+        Assert.IsFalse(areEqual);
+    }
+
+    [TestMethod]
+    [DataRow(0.0001, false)]
+    [DataRow(0.2, true)]
+    public void IsEqualTo_AlmostEqualWithTolerance(double tolerance, bool expectedEqualityResult)
+    {
+        var fuzzyNumber = new FuzzyNumber(1, 2, 3, 4).WithAlphaCutsCount(15);
+        var otherFuzzyNumber = new FuzzyNumber(1.01, 2, 3, 3.99).WithAlphaCutsCount(17);
+
+        bool equalityResult = fuzzyNumber.IsEqualTo(otherFuzzyNumber, tolerance);
+        Assert.AreEqual(expectedEqualityResult, equalityResult);
+    }
+
 
     [TestMethod]
     public void FromAlphaCutFunction()

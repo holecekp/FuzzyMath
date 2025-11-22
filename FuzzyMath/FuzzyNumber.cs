@@ -158,11 +158,46 @@ namespace Holecek.FuzzyMath
             var alphaCuts = new Interval[newAlphaCutsCount];
             for (int i = 0; i < newAlphaCutsCount; i++)
             {
-                double alpha = i / (double)(newAlphaCutsCount - 1);
+                double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, newAlphaCutsCount);
                 alphaCuts[i] = GetAlphaCut(alpha);
             }
 
             return new FuzzyNumber(alphaCuts);
+        }
+
+        public bool IsEqualTo(FuzzyNumber other, double tolerance)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < AlphaCuts.Length; i++)
+            {
+                double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, AlphaCuts.Length);
+                Interval otherFuzzyNumberAlphaCut = other.GetAlphaCut(alpha);
+                if (!AlphaCuts[i].IsEqualTo(otherFuzzyNumberAlphaCut, tolerance))
+                {
+                    return false;
+                }
+            }
+
+            // If the number of alpha-cuts is different, check the remaining alpha-cuts of the other fuzzy number
+            // Skip the first and the last alpha-cuts, because the support and kernel has already been cheched.
+            if (AlphaCuts.Length != other.AlphaCuts.Length)
+            {
+                for (int i = 1; i < other.AlphaCuts.Length - 1; i++)
+                {
+                    double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, other.AlphaCuts.Length);
+                    Interval thisFuzzyNumberAlphaCut = GetAlphaCut(alpha);
+                    if (!other.AlphaCuts[i].IsEqualTo(thisFuzzyNumberAlphaCut, tolerance))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
