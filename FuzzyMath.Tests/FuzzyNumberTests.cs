@@ -270,7 +270,7 @@ public class FuzzyNumberTests
 
 
     [TestMethod]
-    public void FromAlphaCutFunction_FunctionUsingAlphaValue()
+    public void FromAlphaCutFunction()
     {
         const int AlphaCutCount = 3;
         var expectedSupport = new Interval(2, 10);
@@ -278,37 +278,14 @@ public class FuzzyNumberTests
         var expectedKernel = new Interval(5, 8);
 
         var fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
-            AlphaCutCount,
-            (alphaCutIndex, alpha) => new Interval(
-                2 + 3 * alpha,
-                10 - 2 * alpha));
+            alpha => new Interval(2 + 3 * alpha, 10 - 2 * alpha),
+            AlphaCutCount);
 
         Assert.HasCount(AlphaCutCount, fuzzyNumber.AlphaCuts);
         Assert.AreEqual(expectedSupport, fuzzyNumber.AlphaCuts[0]);
         Assert.AreEqual(expectedMiddleAlphaCut, fuzzyNumber.AlphaCuts[1]);
         Assert.AreEqual(expectedKernel, fuzzyNumber.AlphaCuts[2]);
     }
-
-    [TestMethod]
-    public void FromAlphaCutFunction_FunctionUsingAlphCutIndex()
-    {
-        const int AlphaCutCount = 3;
-        var expectedSupport = new Interval(2, 10);
-        var expectedMiddleAlphaCut = new Interval(3, 9);
-        var expectedKernel = new Interval(4, 8);
-
-        var fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
-            AlphaCutCount,
-            (alphaCutIndex, alpha) => new Interval(
-                2 + alphaCutIndex,
-                10 - alphaCutIndex));
-
-        Assert.HasCount(AlphaCutCount, fuzzyNumber.AlphaCuts);
-        Assert.AreEqual(expectedSupport, fuzzyNumber.AlphaCuts[0]);
-        Assert.AreEqual(expectedMiddleAlphaCut, fuzzyNumber.AlphaCuts[1]);
-        Assert.AreEqual(expectedKernel, fuzzyNumber.AlphaCuts[2]);
-    }
-
 
     [TestMethod]
     public void FromFuzzyNumberOperation_UnaryOperation()
@@ -317,7 +294,8 @@ public class FuzzyNumberTests
 
         var resultingFuzzyNumber = FuzzyNumber.FromFuzzyNumberOperation(
             originalFuzzyNumber,
-            alphaCut => alphaCut + 5);
+            alphaCut => alphaCut + 5,
+            originalFuzzyNumber.AlphaCuts.Length);
 
         Assert.HasCount(originalFuzzyNumber.AlphaCuts.Length, resultingFuzzyNumber.AlphaCuts);
         Assert.AreEqual(new Interval(7, 13), resultingFuzzyNumber.AlphaCuts[0]);
@@ -327,16 +305,17 @@ public class FuzzyNumberTests
     [TestMethod]
     public void FromFuzzyNumberOperation_BinaryOperationSameNumberOfAlphaCuts()
     {
-        const int ExpectedAlphaCutCount = 2;
+        const int AlphaCutCountForResult = 2;
         var firstFuzzyNumber = new FuzzyNumber(2, 4, 6);
         var secondFuzzyNumber = new FuzzyNumber(1, 2, 3);
 
         var resultingFuzzyNumber = FuzzyNumber.FromFuzzyNumberOperation(
             firstFuzzyNumber,
             secondFuzzyNumber,
-            (firstAlphaCut, secondAlphaCut) => firstAlphaCut + secondAlphaCut);
+            (firstAlphaCut, secondAlphaCut) => firstAlphaCut + secondAlphaCut,
+            AlphaCutCountForResult);
 
-        Assert.HasCount(ExpectedAlphaCutCount, resultingFuzzyNumber.AlphaCuts);
+        Assert.HasCount(AlphaCutCountForResult, resultingFuzzyNumber.AlphaCuts);
         Assert.AreEqual(new Interval(3, 9), resultingFuzzyNumber.AlphaCuts[0]);
         Assert.AreEqual(new Interval(6, 6), resultingFuzzyNumber.AlphaCuts[1]);
     }
@@ -352,7 +331,7 @@ public class FuzzyNumberTests
             firstFuzzyNumber,
             secondFuzzyNumber,
             (firstAlphaCut, secondAlphaCut) => firstAlphaCut + secondAlphaCut,
-            fallbackAlphaCutsCount: AlphaCutCountForResult);
+            AlphaCutCountForResult);
 
         Assert.HasCount(AlphaCutCountForResult, result.AlphaCuts);
         Assert.AreEqual(new Interval(3, 9), result.AlphaCuts[0]);

@@ -3,7 +3,7 @@
 internal static class AlphaCutsHelper
 {
 
-    public static void ThrowIfAlphaCutsAreInvalid(
+    internal static void ThrowIfAlphaCutsAreInvalid(
         IList<Interval> alphaCuts,
         string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",
         string errorMessageTemplateForInvalidAlphaCut = "Invalid alpha-cut value ({0}). Each alpha-cut must be a subset of the previous one ({1}) in this case).")
@@ -27,7 +27,7 @@ internal static class AlphaCutsHelper
         }
     }
 
-    public static int GetHighestAlphaCutIndexContainingValue(IList<Interval> alphaCuts, double value)
+    internal static int GetHighestAlphaCutIndexContainingValue(IList<Interval> alphaCuts, double value)
     {
         if (!alphaCuts.First().Contains(value))
         {
@@ -43,5 +43,25 @@ internal static class AlphaCutsHelper
         }
 
         return 0;
+    }
+
+
+    internal static double GetAlphaForAlphaCutIndex(int index, int alphaCutsCount)
+    {
+        double alphaCutsStep = 1.0 / (double)(alphaCutsCount - 1);
+        return index * alphaCutsStep;
+    }
+
+    internal static void AdjustsAlphaCutsInListToSatisfySubintervalCondition(IList<Interval> alphaCuts)
+    {
+        for (int i = 1; i < alphaCuts.Count; i++)
+        {
+            var thisAlphaCut = alphaCuts[i];
+            var previousAlphaCut = alphaCuts[i - 1];
+            if (!previousAlphaCut.Contains(thisAlphaCut, tolerance: 0))
+            {
+                alphaCuts[i] = thisAlphaCut.RestrictTo(previousAlphaCut);
+            }
+        }
     }
 }

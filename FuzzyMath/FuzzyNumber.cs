@@ -168,85 +168,57 @@ namespace Holecek.FuzzyMath
         /// <summary>
         /// Creates a new fuzzy number by defining a function that generates its alpha-cuts.
         /// </summary>
-        /// <param name="alphaCutCount">The number of alpha-cuts for the resulting fuzzy number.</param>
-        /// <param name="getAlphaCutFunction">A function that returns an alpha-cut for a given index  and alpha value.
-        /// The function receives two parameters: the index of the alpha-cut (from 0 to alphaCutCount - 1) and the corresponding
-        /// alpha value (from 0 to 1). If the returned alpha-cut is not a subinterval of the previous one (which can occur due to the limited
+        /// <param name="getAlphaCutFunction">A function that returns an alpha-cut for the given alpha value (from 0 to 1).
+        /// If the returned alpha-cut is not a subinterval of the previous one (which can occur due to the limited
         /// accuracy of floating-point operations), the alpha-cut will be automatically adjusted to satisfy this condition.</param>
-        public static FuzzyNumber FromAlphaCutFunction(int alphaCutCount, Func<int, double, Interval> getAlphaCutFunction)
+        /// <param name="alphaCutsCount">The number of alpha-cuts for the resulting fuzzy number.</param>
+        public static FuzzyNumber FromAlphaCutFunction(Func<double, Interval> getAlphaCutFunction, int alphaCutsCount)
         {
-            double alphaCutsStep = 1.0 / (double)(alphaCutCount - 1);
-            var alphaCuts = new Interval[alphaCutCount];
+            var alphaCuts = new Interval[alphaCutsCount];
 
-            for (int i = 0; i < alphaCutCount; i++)
+            for (int i = 0; i < alphaCutsCount; i++)
             {
-                double alpha = i * alphaCutsStep;
-                var alphaCut = getAlphaCutFunction(i, alpha);
-
-                // Each alpha-cut must be a subinterval of the previous one. If this condition doesn't hold,
-                // trim the alpha-cut so that the condition wouldn't be broken.
-                if (i > 0)
-                {
-                    var previousAlphaCut = alphaCuts[i - 1];
-                    if (!previousAlphaCut.Contains(alphaCut, tolerance: 0))
-                    {
-                        alphaCut = alphaCut.RestrictTo(previousAlphaCut);
-                    }
-                }
-
-                alphaCuts[i] = alphaCut;
+                double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, alphaCutsCount);
+                alphaCuts[i] = getAlphaCutFunction(alpha);
             }
 
+            AlphaCutsHelper.AdjustsAlphaCutsInListToSatisfySubintervalCondition(alphaCuts);
             return new FuzzyNumber(alphaCuts);
         }
 
         /// <summary>
-        /// Applies a unary operation to a fuzzy number. A new fuzzy number is created by applying the given operation to each alpha-cut
+        /// Applies a unary operation to a fuzzy number. A new fuzzy number is created by applying the given operation to alpha-cuts
         /// of the original fuzzy number.
         /// </summary>
-        /// <remarks>
-        /// The resulting fuzzy number will have the same number of alpha-cuts as the original fuzzy number.
-        /// </remarks>
         /// <param name="input">The original fuzzy number.</param>
         /// <param name="alphaCutsUnaryOperation">A unary operation that, given an alpha-cut (a specific interval) of the original fuzzy number,
         /// returns the modified alpha-cut.</param>
-        public static FuzzyNumber FromFuzzyNumberOperation(FuzzyNumber input, Func<Interval, Interval> alphaCutsUnaryOperation)
+        /// <param name="alphaCutsCount">The number of alpha-cuts for the resulting fuzzy number.</param>
+        public static FuzzyNumber FromFuzzyNumberOperation(FuzzyNumber input, Func<Interval, Interval> alphaCutsUnaryOperation, int alphaCutsCount)
         {
             return FromAlphaCutFunction(
-                input.AlphaCuts.Length,
-                (alphaCutIndex, alpha) => alphaCutsUnaryOperation(input.AlphaCuts[alphaCutIndex]));
+                alpha => alphaCutsUnaryOperation(input.GetAlphaCut(alpha)),
+                alphaCutsCount);
         }
 
         /// <summary>
-        /// Applies a binary operation on two fuzzy numbers. A new fuzzy number is created by applying the given operation to each alpha-cut
+        /// Applies a binary operation on two fuzzy numbers. A new fuzzy number is created by applying the given operation to alpha-cuts
         /// of the original fuzzy numbers.
         /// </summary>
-        /// <remarks>
-        /// The two input fuzzy numbers are not required to have the same number of alpha-cuts. If they do, the resulting fuzzy number will
-        /// also have the same number of alpha-cuts. If they have a different number of alpha-cuts, the value of <paramref name="fallbackAlphaCutsCount"/>
-        /// will be used as the number of alpha-cuts for the resulting fuzzy number.
-        /// </remarks>
         /// <param name="firstInput">The first input fuzzy number</param>
         /// <param name="secondInput">The second input fuzzy number</param>
         /// <param name="alphaCutsBinaryOperation">A binary operation that, given two corresponding alpha-cuts from the first and second input fuzzy
         /// numbers, returns the alpha-cut for the resulting fuzzy number.</param>
-        /// <param name="fallbackAlphaCutsCount">The number of alpha-cuts for the resulting fuzzy number when the first and second input fuzzy numbers
-        /// have a different number of alpha-cuts.</param>
+        /// <param name="alphaCutsCount">The number of alpha-cuts for the resulting fuzzy number.</param>
         public static FuzzyNumber FromFuzzyNumberOperation(
             FuzzyNumber firstInput,
             FuzzyNumber secondInput,
             Func<Interval, Interval, Interval> alphaCutsBinaryOperation,
-            int fallbackAlphaCutsCount = 60)
+            int alphaCutsCount)
         {
-            if (firstInput.AlphaCuts.Length != secondInput.AlphaCuts.Length)
-            {
-                firstInput = firstInput.WithAlphaCutsCount(fallbackAlphaCutsCount);
-                secondInput = secondInput.WithAlphaCutsCount(fallbackAlphaCutsCount);
-            }
-
             return FromAlphaCutFunction(
-                firstInput.AlphaCuts.Length,
-                (alphaCutIndex, alpha) => alphaCutsBinaryOperation(firstInput.AlphaCuts[alphaCutIndex], secondInput.AlphaCuts[alphaCutIndex]));
+                alpha => alphaCutsBinaryOperation(firstInput.GetAlphaCut(alpha), secondInput.GetAlphaCut(alpha)),
+                alphaCutsCount);
         }
     }
 }
