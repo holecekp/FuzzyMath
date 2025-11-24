@@ -48,7 +48,7 @@ public static class IntervalArithmetic
     /// <summary>
     /// Divides two intervals.
     /// </summary>
-    /// <exception cref="DivideByZeroException">Thrown when the divisor (the second interval) contains zero.</exception>"
+    /// <exception cref="DivideByZeroException">Thrown when the divisor (the second interval) contains zero.</exception>
     public static Interval Divide(Interval a, Interval b)
     {
         if (b.Contains(0.0))
@@ -79,8 +79,9 @@ public static class IntervalArithmetic
     }
 
     /// <summary>
-    /// For interval x returns 1/x.
+    /// For interval x, it returns 1/x.
     /// </summary>
+    /// <exception cref="DivideByZeroException">Thrown when the interval contains zero.</exception>
     public static Interval Reciprocal(Interval interval)
     {
         var one = new Interval(1.0, 1.0);
