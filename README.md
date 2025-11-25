@@ -66,14 +66,14 @@ FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(60);
 ### Creating a fuzzy number using an α-cuts function
 Instead of directly providing a list of α-cuts to the constructor, you can create a fuzzy number from a function that defines its α-cuts.
 This is done using the static method `FuzzyNumber.FromAlphaCutFunction`.
-It expects a function that takes the α-cut index and, for convenience, also the corresponding value of α, and returns the α-cut interval.
+It expects a function that takes the α (from 0 to 1) and returns the corresponding α-cut interval.
 
 In the following example, a fuzzy number is created with 60 α-cuts defined as [2 + 3α, 10 - 2α], for any α in [0, 1]:
 ```csharp
 const int AlphaCutCount = 60;
 FuzzyNumber fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
-    AlphaCutCount,
-    (alphaCutIndex, alpha) => new Interval(2 + 3 * alpha, 10 - 2 * alpha));
+    alpha => new Interval(2 + 3 * alpha, 10 - 2 * alpha),
+    AlphaCutCount);
 ```
 
 An important difference from providing a list of α-cuts directly to the constructor is that the constructor requires the α-cuts to be valid.
