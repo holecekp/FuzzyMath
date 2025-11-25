@@ -21,4 +21,9 @@
     <RepositoryUrl>https://github.com/holecekp/FuzzyMath</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="FuzzyNumbers\" />
+    <Folder Include="Intervals\" />
+  </ItemGroup>
+
 </Project>

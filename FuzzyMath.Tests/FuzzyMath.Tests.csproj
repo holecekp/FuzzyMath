@@ -21,4 +21,9 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FuzzyNumbers\" />
+    <Folder Include="Intervals\" />
+  </ItemGroup>
+
 </Project>
