@@ -1,4 +1,4 @@
-﻿namespace Holecek.FuzzyMath;
+﻿namespace Holecek.FuzzyMath.Intervals;
 
 public static class IntervalArithmetic
 {

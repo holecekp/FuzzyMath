@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using Holecek.FuzzyMath.Intervals;
 
-namespace Holecek.FuzzyMath
+namespace Holecek.FuzzyMath.FuzzyNumbers
 {
     /// <summary>
     /// A piece-wise linear fuzzy number

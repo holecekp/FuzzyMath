@@ -1,4 +1,6 @@
-﻿namespace Holecek.FuzzyMath.Tests;
+﻿using Holecek.FuzzyMath.Intervals;
+
+namespace Holecek.FuzzyMath.Tests.Intervals;
 
 [TestClass]
 public class IntervalArithmeticTests

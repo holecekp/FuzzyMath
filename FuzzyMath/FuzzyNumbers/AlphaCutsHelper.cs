@@ -1,4 +1,6 @@
-﻿namespace Holecek.FuzzyMath;
+﻿using Holecek.FuzzyMath.Intervals;
+
+namespace Holecek.FuzzyMath.FuzzyNumbers;
 
 internal static class AlphaCutsHelper
 {

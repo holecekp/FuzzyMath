@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Holecek.FuzzyMath;
+﻿namespace Holecek.FuzzyMath.Intervals;
 
 /// <summary>
 /// A closed interval

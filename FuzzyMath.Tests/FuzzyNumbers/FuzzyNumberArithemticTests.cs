@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Holecek.FuzzyMath.FuzzyNumbers;
+using Holecek.FuzzyMath.Intervals;
 
-namespace Holecek.FuzzyMath.Tests
+namespace Holecek.FuzzyMath.Tests.FuzzyNumbers
 {
     [TestClass]
     public class FuzzyNumberArithemticTests

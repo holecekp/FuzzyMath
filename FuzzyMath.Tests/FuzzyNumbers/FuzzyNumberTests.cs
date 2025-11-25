@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Holecek.FuzzyMath.FuzzyNumbers;
+using Holecek.FuzzyMath.Intervals;
 
-namespace Holecek.FuzzyMath.Tests;
+namespace Holecek.FuzzyMath.Tests.FuzzyNumbers;
 
 [TestClass]
 public class FuzzyNumberTests
