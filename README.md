@@ -38,7 +38,7 @@ To define a valid fuzzy number, the list of α-cuts must contain at least two it
 ### Get an α-cut
 An α-cut of a fuzzy number can be obtained using the `GetAlphaCut` method for any α in the range [0, 1]. For example:
 ```csharp
-FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
+var fuzzyNumber = new FuzzyNumber(1, 2, 3);
 Interval alphaCut = fuzzyNumber.GetAlphaCut(0.75);
 ```
 **Mathematical note:**
@@ -49,19 +49,33 @@ This makes the method much more practical to use.
 ### Get membership degree
 The membership degree of an element is calculated by `GetMembership`. For example:
 ```csharp
-FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3);
+var fuzzyNumber = new FuzzyNumber(1, 2, 3);
 double alpha = fuzzyNumber.GetMembership(1.5);
 ```
-
-## Advanced operations with α-cuts
 
 ### Changing the number of α-cuts
 The `WithAlphaCutsCount` method creates a copy of the fuzzy number with the specified number of α-cuts.
 This is especially useful when performing operations with multiple fuzzy numbers that require all of them to have the same number of α-cuts.
 In the following example, a triangular fuzzy number is recreated with 60 α-cuts:
 ```csharp
-FuzzyNumber fuzzyNumber = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(60);
+var fuzzyNumber = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(60);
 ```
+
+### Equality of fuzzy numbers
+The method `IsEqualTo` checks if one fuzzy number is equal to another. The comparison is made according to the definition: two fuzzy numbers
+are considered equal if their respective α-cuts are equal. The compared fuzzy numbers do not need to have the same number of α-cuts.
+
+The method takes two arguments: another fuzzy number for comparison and a tolerance value for the comparison.
+
+```csharp
+const double Tolerance = 0.001;
+var first = new FuzzyNumber(1, 2, 3);
+var sameWithMoreAlphaCuts = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(4);
+
+bool areEqual = first.IsEqualTo(sameWithMoreAlphaCuts, Tolerance); // true
+```
+
+## Advanced operations with α-cuts
 
 ### Creating a fuzzy number using an α-cuts function
 Instead of directly providing a list of α-cuts to the constructor, you can create a fuzzy number from a function that defines its α-cuts.
@@ -69,6 +83,7 @@ This is done using the static method `FuzzyNumber.FromAlphaCutFunction`.
 It expects a function that takes the α (from 0 to 1) and returns the corresponding α-cut interval.
 
 In the following example, a fuzzy number is created with 60 α-cuts defined as [2 + 3α, 10 - 2α], for any α in [0, 1]:
+
 ```csharp
 const int AlphaCutCount = 60;
 FuzzyNumber fuzzyNumber = FuzzyNumber.FromAlphaCutFunction(
@@ -85,3 +100,37 @@ used for the interval boundaries could otherwise lead to invalid α-cuts.
 
 For example, due to rounding errors, the resulting α-cuts could be {[2, 3], [1.99999, 3], [2, 3.00001]}.
 The constructor would throw an exception, whereas the `FromAlphaCutFunction` method would automatically adjust these α-cuts to {[2, 3], [2, 3], [2, 3]} to ensure validity.
+
+### Custom operations with fuzzy numbers
+
+Unary and binary operations with fuzzy numbers can be performed using the `FuzzyNumber.FromFuzzyNumberOperation` static method. In the case of a **unary operation**,
+the method takes the input fuzzy number, a function that transforms its α-cuts, and the desired number of α-cuts for the resulting fuzzy number.
+
+For example, the negation of a fuzzy number can be created as follows:
+
+```csharp
+const int AlphaCutsCount = 10;
+var fuzzyTwo  = new FuzzyNumber(1, 2, 3);
+
+FuzzyNumber result = FuzzyNumber.FromFuzzyNumberOperation(
+    fuzzyTwo,
+    alphaCut => -1 * alphaCut,
+    AlphaCutsCount);
+```
+
+A **binary operation** with two fuzzy numbers can be done in a similar way. The following arguments are provided to the method: two input fuzzy numbers, a function that
+takes the α-cuts from the first and the second input fuzzy numbers and returns the corresponding α-cut for the result, and the number of α-cuts for the resulting fuzzy number.
+
+The following example shows the multiplication of two fuzzy numbers:
+
+```csharp
+const int AlphaCutsCount = 10;
+var a  = new FuzzyNumber(1, 2, 3);
+var b  = new FuzzyNumber(4, 5, 6);
+
+FuzzyNumber result = FuzzyNumber.FromFuzzyNumberOperation(
+    a,
+    b,
+    (alphaCutA, alphaCutB) => alphaCutA * alphaCutB,
+    AlphaCutsCount);
+```
