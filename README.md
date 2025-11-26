@@ -104,33 +104,36 @@ The constructor would throw an exception, whereas the `FromAlphaCutFunction` met
 ### Custom operations with fuzzy numbers
 
 Unary and binary operations with fuzzy numbers can be performed using the `FuzzyNumber.FromFuzzyNumberOperation` static method. In the case of a **unary operation**,
-the method takes the input fuzzy number, a function that transforms its α-cuts, and the desired number of α-cuts for the resulting fuzzy number.
+the method takes the input fuzzy number and a function that transforms its α-cuts. By default, the result will have the same number of α-cuts as the input, but a different
+number of α-cuts can be optionally provided as another argument.
 
 For example, the negation of a fuzzy number can be created as follows:
 
 ```csharp
-const int AlphaCutsCount = 10;
-var fuzzyTwo  = new FuzzyNumber(1, 2, 3);
+var inputFuzzyNumber  = new FuzzyNumber(1, 2, 3);
 
 FuzzyNumber result = FuzzyNumber.FromFuzzyNumberOperation(
-    fuzzyTwo,
-    alphaCut => -1 * alphaCut,
-    AlphaCutsCount);
+    inputFuzzyNumber,
+    alphaCut => -1 * alphaCut);
 ```
 
 A **binary operation** with two fuzzy numbers can be done in a similar way. The following arguments are provided to the method: two input fuzzy numbers, a function that
-takes the α-cuts from the first and the second input fuzzy numbers and returns the corresponding α-cut for the result, and the number of α-cuts for the resulting fuzzy number.
+takes the α-cuts from the first and the second input fuzzy numbers and returns the corresponding α-cut for the result.
 
 The following example shows the multiplication of two fuzzy numbers:
 
 ```csharp
-const int AlphaCutsCount = 10;
-var a  = new FuzzyNumber(1, 2, 3);
-var b  = new FuzzyNumber(4, 5, 6);
+var fuzzyNumberA  = new FuzzyNumber(1, 2, 3);
+var fuzzyNumberB  = new FuzzyNumber(4, 5, 6);
 
 FuzzyNumber result = FuzzyNumber.FromFuzzyNumberOperation(
-    a,
-    b,
-    (alphaCutA, alphaCutB) => alphaCutA * alphaCutB,
-    AlphaCutsCount);
+    fuzzyNumberA,
+    fuzzyNumberB,
+    (alphaCutA, alphaCutB) => alphaCutA * alphaCutB;
 ```
+
+The input fuzzy numbers must have the same number of α-cut, because otherwhise it isn't possible to determine the number of α-cuts for the result. An exception is thrown in that case.
+However, the method has another overload, that takes the number of α-cuts for the resulting fuzzy number as an additional argument. This overload can operate also on input fuzzy numbers
+with different numbers of α-cuts.
+
+## Arithmetic operations with fuzzy numbers

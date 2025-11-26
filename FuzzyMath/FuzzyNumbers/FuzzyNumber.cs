@@ -14,6 +14,7 @@ public class FuzzyNumber
     /// <summary>
     /// A trapezoidal fuzzy number (supportMin, kernelMin, kernelMax, supportMax)
     /// </summary>
+    /// <exception cref="ArgumentException">The exception is thrown if the arguments don't define a valid fuzzy number.</exception>
     public FuzzyNumber(double supportMin, double kernelMin, double kernelMax, double supportMax)
     {
         var support = new Interval(supportMin, supportMax);
@@ -28,12 +29,14 @@ public class FuzzyNumber
     /// <summary>
     /// A triangular fuzzy number (supportMin, kernel, supportMax)
     /// </summary>
+    /// <exception cref="ArgumentException">The exception is thrown if the arguments don't define a valid fuzzy number.</exception>
     public FuzzyNumber(double supportMin, double kernel, double supportMax)
         : this(supportMin, kernel, kernel, supportMax) { }
 
     /// <summary>
     /// A fuzzy number representing a closed interval [supportMin, supportMax]
     /// </summary>
+    /// <exception cref="ArgumentException">The exception is thrown if the arguments don't define a valid fuzzy number.</exception>
     public FuzzyNumber(double supportMin, double supportMax)
         : this(supportMin, supportMin, supportMax, supportMax) { }
 
@@ -46,6 +49,9 @@ public class FuzzyNumber
     /// <summary>
     /// A piece-wise linear fuzzy number. The first alpha-cut is the support, the last one is the kernel.
     /// </summary>
+    /// <exception cref="ArgumentNullException">The exception is thrown if the alpha-cuts list is null.</exception>
+    /// <exception cref="ArgumentException">The exception is thrown if the alpha-cuts list contains less than 2 alpha-cut, or
+    /// if it doesn't hold that an alpha-cut is a sub-interval of the previous one.</exception>
     public FuzzyNumber(IList<Interval> alphaCuts)
     {
         AlphaCutsHelper.ThrowIfAlphaCutsAreInvalid(alphaCuts);
@@ -60,6 +66,7 @@ public class FuzzyNumber
     /// Returns an alpha-cut
     /// </summary>
     /// <param name="alpha">Value between 0 and 1</param>
+    /// <exception cref="ArgumentOutOfRangeException">The exception is thrown if the alpha isn't between 0 and 1.</exception>
     public Interval GetAlphaCut(double alpha)
     {
         if (alpha == 0)
@@ -220,6 +227,18 @@ public class FuzzyNumber
 
     /// <summary>
     /// Applies a unary operation to a fuzzy number. A new fuzzy number is created by applying the given operation to alpha-cuts
+    /// of the original fuzzy number. The resulting fuzzy number has the same number of alpha-cuts as the original one.
+    /// </summary>
+    /// <param name="input">The original fuzzy number.</param>
+    /// <param name="alphaCutsUnaryOperation">A unary operation that, given an alpha-cut (a specific interval) of the original fuzzy number,
+    /// returns the modified alpha-cut.</param>
+    public static FuzzyNumber FromFuzzyNumberOperation(FuzzyNumber input, Func<Interval, Interval> alphaCutsUnaryOperation)
+    {
+        return FromFuzzyNumberOperation(input, alphaCutsUnaryOperation, input.AlphaCuts.Length);
+    }
+
+    /// <summary>
+    /// Applies a unary operation to a fuzzy number. A new fuzzy number is created by applying the given operation to alpha-cuts
     /// of the original fuzzy number.
     /// </summary>
     /// <param name="input">The original fuzzy number.</param>
@@ -231,6 +250,33 @@ public class FuzzyNumber
         return FromAlphaCutFunction(
             alpha => alphaCutsUnaryOperation(input.GetAlphaCut(alpha)),
             alphaCutsCount);
+    }
+
+    /// <summary>
+    /// Applies a binary operation on two fuzzy numbers. A new fuzzy number is created by applying the given operation to alpha-cuts
+    /// of the original fuzzy numbers. The two inpuut fuzzy numbers must have the same number of alpha-cuts, otherwise an exception is thrown.
+    /// If you need to operate on fuzzy numbers with different number of alpha-cuts, use the FromFuzzyNumberOperation overload that
+    /// allows you to specify the number of alpha-cuts for the resulting fuzzy number.
+    /// </summary>
+    /// <param name="firstInput">The first input fuzzy number</param>
+    /// <param name="secondInput">The second input fuzzy number</param>
+    /// <param name="alphaCutsBinaryOperation">A binary operation that, given two corresponding alpha-cuts from the first and second input fuzzy
+    /// numbers, returns the alpha-cut for the resulting fuzzy number.</param>
+    /// <exception cref="ArgumentException">The exception is thrown if the two input fuzzy numbers doesn't have the same number of alpha-cuts.
+    /// Use in that case the overload with the alpha-cuts count for the result as an additional arguement.</exception>
+    public static FuzzyNumber FromFuzzyNumberOperation(
+        FuzzyNumber firstInput,
+        FuzzyNumber secondInput,
+        Func<Interval, Interval, Interval> alphaCutsBinaryOperation)
+    {
+        if (firstInput.AlphaCuts.Length != secondInput.AlphaCuts.Length)
+        {
+            throw new ArgumentException(
+                "The two input fuzzy numbers must have the same number of alpha-cuts." +
+                "If you want to apply the operation on fuzzy numbers with a different number of alpha-cuts, specify the number of alpha-cuts for the result.");
+        }
+
+        return FromFuzzyNumberOperation(firstInput, secondInput, alphaCutsBinaryOperation, firstInput.AlphaCuts.Length);
     }
 
     /// <summary>
