@@ -298,4 +298,20 @@ public class FuzzyNumber
             alpha => alphaCutsBinaryOperation(firstInput.GetAlphaCut(alpha), secondInput.GetAlphaCut(alpha)),
             alphaCutsCount);
     }
+
+    public static FuzzyNumber operator +(FuzzyNumber a, FuzzyNumber b) => FuzzyNumberArithmetic.Add(a, b);
+    public static FuzzyNumber operator +(FuzzyNumber a, double b) => FuzzyNumberArithmetic.Add(a, b);
+    public static FuzzyNumber operator +(double a, FuzzyNumber b) => FuzzyNumberArithmetic.Add(a, b);
+
+    public static FuzzyNumber operator -(FuzzyNumber a, FuzzyNumber b) => FuzzyNumberArithmetic.Subtract(a, b);
+    public static FuzzyNumber operator -(FuzzyNumber a, double b) => FuzzyNumberArithmetic.Subtract(a, b);
+    public static FuzzyNumber operator -(double a, FuzzyNumber b) => FuzzyNumberArithmetic.Subtract(a, b);
+
+    public static FuzzyNumber operator *(FuzzyNumber a, FuzzyNumber b) => FuzzyNumberArithmetic.Multiply(a, b);
+    public static FuzzyNumber operator *(FuzzyNumber a, double b) => FuzzyNumberArithmetic.Multiply(a, b);
+    public static FuzzyNumber operator *(double a, FuzzyNumber b) => FuzzyNumberArithmetic.Multiply(a, b);
+
+    public static FuzzyNumber operator /(FuzzyNumber a, FuzzyNumber b) => FuzzyNumberArithmetic.Divide(a, b);
+    public static FuzzyNumber operator /(FuzzyNumber a, double b) => FuzzyNumberArithmetic.Divide(a, b);
+    public static FuzzyNumber operator /(double a, FuzzyNumber b) => FuzzyNumberArithmetic.Divide(a, b);
 }
