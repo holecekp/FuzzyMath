@@ -4,7 +4,7 @@ using Holecek.FuzzyMath.Intervals;
 namespace Holecek.FuzzyMath.Tests.FuzzyNumbers;
 
 [TestClass]
-public class FuzzyNumberArithemticTests
+public class FuzzyNumberArithmeticTests
 {
     [TestMethod]
     public void Add()
@@ -13,7 +13,7 @@ public class FuzzyNumberArithemticTests
         var input1 = new FuzzyNumber(1, 2, 3);
         var input2 = new FuzzyNumber(3, 4, 5);
 
-        var result = FuzzyNumberArithemtic.Add(input1, input2, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Add(input1, input2, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(4, 8), result.AlphaCuts[0]);
@@ -27,7 +27,7 @@ public class FuzzyNumberArithemticTests
         var input1 = new FuzzyNumber(1, 2, 3);
         var input2 = new FuzzyNumber(3, 4, 5);
 
-        var result = FuzzyNumberArithemtic.Subtract(input1, input2, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Subtract(input1, input2, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(-4, 0), result.AlphaCuts[0]);
@@ -41,7 +41,7 @@ public class FuzzyNumberArithemticTests
         var input1 = new FuzzyNumber(1, 2, 3);
         var input2 = new FuzzyNumber(3, 4, 5);
 
-        var result = FuzzyNumberArithemtic.Multiply(input1, input2, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Multiply(input1, input2, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(3, 15), result.AlphaCuts[0]);
@@ -55,7 +55,7 @@ public class FuzzyNumberArithemticTests
         var input1 = new FuzzyNumber(1, 2, 3);
         var input2 = new FuzzyNumber(3, 4, 5);
 
-        var result = FuzzyNumberArithemtic.Divide(input1, input2, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Divide(input1, input2, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(1.0/5.0, 1), result.AlphaCuts[0]);
@@ -68,7 +68,7 @@ public class FuzzyNumberArithemticTests
         const int AlphaCutsCount = 2;
         var input = new FuzzyNumber(1, 2, 3);
 
-        var result = FuzzyNumberArithemtic.Negation(input, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Negation(input, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(-3, -1), result.AlphaCuts[0]);
@@ -81,7 +81,7 @@ public class FuzzyNumberArithemticTests
         const int AlphaCutsCount = 2;
         var input = new FuzzyNumber(1, 2, 3);
 
-        var result = FuzzyNumberArithemtic.Reciprocal(input, AlphaCutsCount);
+        var result = FuzzyNumberArithmetic.Reciprocal(input, AlphaCutsCount);
 
         Assert.HasCount(2, result.AlphaCuts);
         Assert.AreEqual(new Interval(1.0 / 3.0, 1), result.AlphaCuts[0]);

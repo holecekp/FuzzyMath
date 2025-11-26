@@ -2,7 +2,7 @@
 
 namespace Holecek.FuzzyMath.FuzzyNumbers;
 
-public static class FuzzyNumberArithemtic
+public static class FuzzyNumberArithmetic
 {
     /// <summary>
     /// Adds two fuzzy numbers
