@@ -7,7 +7,7 @@ namespace Holecek.FuzzyMath.FuzzyNumbers;
 /// </summary>
 public class FuzzyNumber
 {
-    public Interval[] AlphaCuts { get; protected set; }
+    public IReadOnlyList<Interval> AlphaCuts { get; protected set; }
     public Interval Support => AlphaCuts.First();
     public Interval Kernel => AlphaCuts.Last();
 
@@ -19,11 +19,13 @@ public class FuzzyNumber
     {
         var support = new Interval(supportMin, supportMax);
         var kernel = new Interval(kernelMin, kernelMax);
-        AlphaCuts = new Interval[] { support, kernel };
+        var alphaCuts = new Interval[] { support, kernel };
 
         AlphaCutsHelper.ThrowIfAlphaCutsAreInvalid(
-            AlphaCuts,
+            alphaCuts,
             errorMessageTemplateForInvalidAlphaCut: "The constructor parameters don't define a valid fuzzy number. Kernel {0} must be a subset of the support {1}");
+
+        AlphaCuts = alphaCuts;
     }
 
     /// <summary>
@@ -52,7 +54,7 @@ public class FuzzyNumber
     /// <exception cref="ArgumentNullException">The exception is thrown if the alpha-cuts list is null.</exception>
     /// <exception cref="ArgumentException">The exception is thrown if the alpha-cuts list contains less than 2 alpha-cut, or
     /// if it doesn't hold that an alpha-cut is a sub-interval of the previous one.</exception>
-    public FuzzyNumber(IList<Interval> alphaCuts)
+    public FuzzyNumber(ICollection<Interval> alphaCuts)
     {
         AlphaCutsHelper.ThrowIfAlphaCutsAreInvalid(alphaCuts);
 
@@ -84,7 +86,7 @@ public class FuzzyNumber
             throw new ArgumentOutOfRangeException(nameof(alpha), "Alpha must a number be between 0 a 1.");
         }
 
-        double alphaCutsSteps = 1.0 / (double)(AlphaCuts.Length - 1);
+        double alphaCutsSteps = 1.0 / (double)(AlphaCuts.Count - 1);
 
         int lowerAlphaCutIndex = (int)Math.Floor(alpha / alphaCutsSteps);
         int higherAlphaCutIndex = lowerAlphaCutIndex + 1;
@@ -123,7 +125,7 @@ public class FuzzyNumber
         Interval lowerAlphaCut = AlphaCuts[lowerAlphaCutIndex];
         Interval higherAlphaCut = AlphaCuts[higherAlphaCutIndex];
 
-        double alphaStep = 1 / (double)(AlphaCuts.Length - 1);
+        double alphaStep = 1 / (double)(AlphaCuts.Count - 1);
         double lowerAlpha = lowerAlphaCutIndex * alphaStep;
 
         double ratio;
@@ -154,10 +156,11 @@ public class FuzzyNumber
             throw new ArgumentOutOfRangeException(nameof(newAlphaCutsCount), "The number of alpha-cuts must be at least 2.");
         }
 
-        if (newAlphaCutsCount == AlphaCuts.Length)
-        {
-            return new FuzzyNumber(AlphaCuts);
-        }
+        // Temporary disabled optimization
+        //if (newAlphaCutsCount == AlphaCuts.Count)
+        //{
+        //    return new FuzzyNumber(AlphaCuts);
+        //}
 
         var alphaCuts = new Interval[newAlphaCutsCount];
         for (int i = 0; i < newAlphaCutsCount; i++)
@@ -176,9 +179,9 @@ public class FuzzyNumber
             return false;
         }
 
-        for (int i = 0; i < AlphaCuts.Length; i++)
+        for (int i = 0; i < AlphaCuts.Count; i++)
         {
-            double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, AlphaCuts.Length);
+            double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, AlphaCuts.Count);
             Interval otherFuzzyNumberAlphaCut = other.GetAlphaCut(alpha);
             if (!AlphaCuts[i].IsEqualTo(otherFuzzyNumberAlphaCut, tolerance))
             {
@@ -188,11 +191,11 @@ public class FuzzyNumber
 
         // If the number of alpha-cuts is different, check the remaining alpha-cuts of the other fuzzy number
         // Skip the first and the last alpha-cuts, because the support and kernel has already been cheched.
-        if (AlphaCuts.Length != other.AlphaCuts.Length)
+        if (AlphaCuts.Count != other.AlphaCuts.Count)
         {
-            for (int i = 1; i < other.AlphaCuts.Length - 1; i++)
+            for (int i = 1; i < other.AlphaCuts.Count - 1; i++)
             {
-                double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, other.AlphaCuts.Length);
+                double alpha = AlphaCutsHelper.GetAlphaForAlphaCutIndex(i, other.AlphaCuts.Count);
                 Interval thisFuzzyNumberAlphaCut = GetAlphaCut(alpha);
                 if (!other.AlphaCuts[i].IsEqualTo(thisFuzzyNumberAlphaCut, tolerance))
                 {
@@ -234,7 +237,7 @@ public class FuzzyNumber
     /// returns the modified alpha-cut.</param>
     public static FuzzyNumber FromFuzzyNumberOperation(FuzzyNumber input, Func<Interval, Interval> alphaCutsUnaryOperation)
     {
-        return FromFuzzyNumberOperation(input, alphaCutsUnaryOperation, input.AlphaCuts.Length);
+        return FromFuzzyNumberOperation(input, alphaCutsUnaryOperation, input.AlphaCuts.Count);
     }
 
     /// <summary>
@@ -269,14 +272,14 @@ public class FuzzyNumber
         FuzzyNumber secondInput,
         Func<Interval, Interval, Interval> alphaCutsBinaryOperation)
     {
-        if (firstInput.AlphaCuts.Length != secondInput.AlphaCuts.Length)
+        if (firstInput.AlphaCuts.Count != secondInput.AlphaCuts.Count)
         {
             throw new ArgumentException(
                 "The two input fuzzy numbers must have the same number of alpha-cuts." +
                 "If you want to apply the operation on fuzzy numbers with a different number of alpha-cuts, specify the number of alpha-cuts for the result.");
         }
 
-        return FromFuzzyNumberOperation(firstInput, secondInput, alphaCutsBinaryOperation, firstInput.AlphaCuts.Length);
+        return FromFuzzyNumberOperation(firstInput, secondInput, alphaCutsBinaryOperation, firstInput.AlphaCuts.Count);
     }
 
     /// <summary>

@@ -94,12 +94,12 @@ public static class FuzzyNumberArithmetic
 
     private static FuzzyNumber ApplyOperation(double a, FuzzyNumber b, Func<Interval, Interval, Interval> alphaCutsBinaryOperation)
     {
-        return FuzzyNumber.FromFuzzyNumberOperation(new FuzzyNumber(a), b, alphaCutsBinaryOperation, b.AlphaCuts.Length);
+        return FuzzyNumber.FromFuzzyNumberOperation(new FuzzyNumber(a), b, alphaCutsBinaryOperation, b.AlphaCuts.Count);
     }
 
     private static FuzzyNumber ApplyOperation(FuzzyNumber a, double b, Func<Interval, Interval, Interval> alphaCutsBinaryOperation)
     {
-        return FuzzyNumber.FromFuzzyNumberOperation(a, new FuzzyNumber(b), alphaCutsBinaryOperation, a.AlphaCuts.Length);
+        return FuzzyNumber.FromFuzzyNumberOperation(a, new FuzzyNumber(b), alphaCutsBinaryOperation, a.AlphaCuts.Count);
     }
 
     private static FuzzyNumber ApplyOperation(FuzzyNumber a, Func<Interval, Interval> alphaCutsUnaryOperation, int alphaCutsCount)

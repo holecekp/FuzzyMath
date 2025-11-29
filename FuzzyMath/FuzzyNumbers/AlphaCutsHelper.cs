@@ -4,9 +4,8 @@ namespace Holecek.FuzzyMath.FuzzyNumbers;
 
 internal static class AlphaCutsHelper
 {
-
     internal static void ThrowIfAlphaCutsAreInvalid(
-        IList<Interval> alphaCuts,
+        IEnumerable<Interval> alphaCuts,
         string errorMessageForNotEnoughAlphaCuts = "Alpha-cuts list must contain at least 2 elements (the support and the kernel).",
         string errorMessageTemplateForInvalidAlphaCut = "Invalid alpha-cut value ({0}). Each alpha-cut must be a subset of the previous one ({1}) in this case).")
     {
@@ -15,21 +14,24 @@ internal static class AlphaCutsHelper
             throw new ArgumentNullException();
         }
 
-        if (alphaCuts.Count < 2)
+        if (alphaCuts.Count() < 2)
         {
             throw new ArgumentException(errorMessageForNotEnoughAlphaCuts);
         }
 
-        for (int i = 1; i < alphaCuts.Count; i++)
+        Interval? previousAlphaCut = null;
+        foreach (var alphaCut in alphaCuts)
         {
-            if (!alphaCuts[i - 1].Contains(alphaCuts[i], tolerance: 0))
+            if (previousAlphaCut != null && !previousAlphaCut.Value.Contains(alphaCut, tolerance: 0))
             {
-                throw new ArgumentException(String.Format(errorMessageTemplateForInvalidAlphaCut, alphaCuts[i], alphaCuts[i - 1]));
+                throw new ArgumentException(String.Format(errorMessageTemplateForInvalidAlphaCut, alphaCut, previousAlphaCut.Value));
             }
+
+            previousAlphaCut = alphaCut;
         }
     }
 
-    internal static int GetHighestAlphaCutIndexContainingValue(IList<Interval> alphaCuts, double value)
+    internal static int GetHighestAlphaCutIndexContainingValue(IReadOnlyList<Interval> alphaCuts, double value)
     {
         if (!alphaCuts.First().Contains(value))
         {
@@ -46,7 +48,6 @@ internal static class AlphaCutsHelper
 
         return 0;
     }
-
 
     internal static double GetAlphaForAlphaCutIndex(int index, int alphaCutsCount)
     {

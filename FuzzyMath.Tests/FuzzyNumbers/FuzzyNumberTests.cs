@@ -229,7 +229,7 @@ public class FuzzyNumberTests
     public void WithAlphaCutsCount_ForSameNumberOfAlphaCuts_AlphaCutsAreNotChanged()
     {
         var originalFuzzyNumber = new FuzzyNumber(1, 2, 3, 5);
-        int originalAlphaCutsCount = originalFuzzyNumber.AlphaCuts.Length;
+        int originalAlphaCutsCount = originalFuzzyNumber.AlphaCuts.Count;
 
         var modifiedFuzzyNumber = originalFuzzyNumber.WithAlphaCutsCount(originalAlphaCutsCount);
 
@@ -339,9 +339,9 @@ public class FuzzyNumberTests
         var resultingFuzzyNumber = FuzzyNumber.FromFuzzyNumberOperation(
             originalFuzzyNumber,
             alphaCut => alphaCut + 5,
-            originalFuzzyNumber.AlphaCuts.Length);
+            originalFuzzyNumber.AlphaCuts.Count);
 
-        Assert.HasCount(originalFuzzyNumber.AlphaCuts.Length, resultingFuzzyNumber.AlphaCuts);
+        Assert.HasCount(originalFuzzyNumber.AlphaCuts.Count, resultingFuzzyNumber.AlphaCuts);
         Assert.AreEqual(new Interval(7, 13), resultingFuzzyNumber.AlphaCuts[0]);
         Assert.AreEqual(new Interval(9, 11), resultingFuzzyNumber.AlphaCuts[1]);
     }
