@@ -1,9 +1,11 @@
+[![Nuget](https://img.shields.io/nuget/v/Holecek.FuzzyMath)](https://www.nuget.org/packages/Holecek.FuzzyMath) [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE.txt)
+
 # Fuzzy Numbers Library for .NET
 An open-source library for performing basic operations with fuzzy numbers. It supports piecewise linear fuzzy numbers of arbitrarily high degree, which makes it computationally efficient. Piecewise linear fuzzy numbers can also be used to approximate more complex types of fuzzy numbers.
 
 The library is written in C# and targets .NET Standard 2.0, making it compatible with both modern .NET versions and older .NET Framework applications.
 
-The library will be available as a NuGet package (`Holecek.FuzzyMath`). It is currently in a pre-release version.
+The library is available as a [NuGet package Holecek.FuzzyMath](https://www.nuget.org/packages/Holecek.FuzzyMath). It is currently a pre-release version.
 
 # Usage
 ## Create a fuzzy number
