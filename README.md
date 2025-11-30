@@ -1,10 +1,9 @@
 # Fuzzy Numbers Library for .NET
 An open-source library for performing basic operations with fuzzy numbers. It supports piecewise linear fuzzy numbers of arbitrarily high degree, which makes it computationally efficient. Piecewise linear fuzzy numbers can also be used to approximate more complex types of fuzzy numbers.
 
-The library is written in C# and it targets .NET Standard 2.0 so that it could be used in the modern .NET versions as well
-as in older .NET Framework applications.
+The library is written in C# and targets .NET Standard 2.0, making it compatible with both modern .NET versions and older .NET Framework applications.
 
-The library will be available as a Nuget (Holecek.FuzzyMath). It's currently in a pre-release version.
+The library will be available as a NuGet package (`Holecek.FuzzyMath`). It is currently in a pre-release version.
 
 # Usage
 ## Create a fuzzy number
@@ -81,11 +80,9 @@ var sameWithMoreAlphaCuts = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(4);
 bool areEqual = first.IsEqualTo(sameWithMoreAlphaCuts, Tolerance); // true
 ```
 
-## Arithmetic operations with fuzzy numbers
+## Arithmetic Operations with Fuzzy Numbers
 
-The basic arithmetic operators `+`, `-`, `*`, and `/` are overloaded. Performing arithmetic operations with
-fuzzy numbers is therefore very simple.
-
+The basic arithmetic operators `+`, `-`, `*`, and `/` are overloaded, making arithmetic operations with fuzzy numbers very simple.
 ```csharp
 var a = new FuzzyNumber(1, 2, 3);
 var b = new FuzzyNumber(3, 4, 5);
@@ -93,14 +90,12 @@ var c = new FuzzyNumber(6, 7, 8, 9);
 FuzzyNumber result = 0.3  * a + 0.6 * b + 0.1 * c;
 ```
 
-It can be seen from the  example above that also a combination of `FuzzyNumber` and double values is supported for the arithmetic operations.
+As seen in the example above, it is also possible to combine `FuzzyNumber` instances with `double` values for arithmetic operations.
 
-This is a very simple and convenient way but it has a limitation that the fuzzy numbers must have the same way of α-cuts. Otherwise an exception is thrown.
+Using the built-in mathematical operators is simple and convenient, but it has a limitation: the fuzzy numbers must have the same number
+of α-cuts. If they don't, an exception will be thrown.
 
-If you need more control or perform the calculation for fuzzy numbers with different number of α-cuts, you can use
-the static methods in the `FuzzyNumberArithmetic` class. The `Add`, `Subtract`, `Multiply`, and `Divide` have
-an overload with the number of α-cuts for the result as an additional argument. When this argument is specified,
-the input fuzzy numbers can have a different number of α-cuts and the conversion is performed automatically.
+If you need more control, or if you're working with fuzzy numbers that have a different number of α-cuts, you can use the static methods in the `FuzzyNumberArithmetic` class. The `Add`, `Subtract`, `Multiply`, and `Divide` methods each have an overload that accepts the desired number of α-cuts for the result as an additional argument. When this argument is provided, fuzzy numbers with different α-cuts will be automatically converted.
 
 ```csharp
 var a = new FuzzyNumber(1, 2, 3).WithAlphaCutsCount(15);
@@ -108,10 +103,9 @@ var b = new FuzzyNumber(3, 4, 5).WithAlphaCutsCount(40);;
 FuzzyNumber sum = FuzzyNumberArithmetic.Add(a, b, alphaCutsCount: 30);
 ```
 
-The `FuzzyNumberArithmetic` contains also additional methods:
-* `Negation` - for a fuzzy number A, the value -A is returned.
-* `Reciprocal` - for a fuzzy number A, the value 1/A is returned.
-
+The `FuzzyNumberArithmetic` class also provides additional methods:
+* `Negation`: Returns the negation of a fuzzy number A, i.e., `-A`.
+* `Reciprocal`: Returns the reciprocal of a fuzzy number A, i.e., `1/A`.
 
 ## Advanced operations with α-cuts
 
@@ -174,7 +168,6 @@ The input fuzzy numbers must have the same number of α-cut, because otherwhise 
 However, the method has another overload, that takes the number of α-cuts for the resulting fuzzy number as an additional argument. This overload can operate also on input fuzzy numbers with different numbers of α-cuts.
 
 ## Intervals
-Intervals related clases are in the `Holecek.FuzzyMath.Intervals` namespace. The `Interval` class represents a closed interval and it's
-used in this library primarily to represent an α-cut of a fuzzy number.
+The classes related to intervals are found in the `Holecek.FuzzyMath.Intervals` namespace. The `Interval` class represents a closed interval and is primarily used in this library to represent the α-cut of a fuzzy number.
 
-The `Min` and `Max` properties represent the lower and the upper bound of the interval. Arithmetic operators `+`, `-`, `*`, and `/` are overloaded so they can be used for the interval arithmetic easily in a similar way described for the fuzzy numbers before.
+The `Min` and `Max` properties represent the lower and upper bounds of the interval. The arithmetic operators `+`, `-`, `*`, and `/` are overloaded, allowing for easy interval arithmetic in a similar way to the fuzzy numbers described earlier.
