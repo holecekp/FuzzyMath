@@ -302,6 +302,8 @@ public class FuzzyNumber
             alphaCutsCount);
     }
 
+    public override string ToString() => String.Join(", ", AlphaCuts);
+
     public static FuzzyNumber operator +(FuzzyNumber a, FuzzyNumber b) => FuzzyNumberArithmetic.Add(a, b);
     public static FuzzyNumber operator +(FuzzyNumber a, double b) => FuzzyNumberArithmetic.Add(a, b);
     public static FuzzyNumber operator +(double a, FuzzyNumber b) => FuzzyNumberArithmetic.Add(a, b);
