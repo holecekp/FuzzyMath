@@ -12,7 +12,7 @@
   <PropertyGroup>
     <PackageId>Holecek.FuzzyMath</PackageId>
     <Authors>Pavel Holeček</Authors>
-    <Version>0.9.0-alpha</Version>
+    <Version>1.0.0</Version>
     <Title>Fuzzy Numbers Library for .NET</Title>
     <Description>An open-source library for performing basic operations with fuzzy numbers. It supports piecewise linear fuzzy numbers of arbitrarily high degree, which makes it computationally efficient. Piecewise linear fuzzy numbers can also be used to approximate more complex types of fuzzy numbers.</Description>
     <PackageTags>fuzzy number; fuzzy set; interval arthmetics; alpha-cut; membership function; piecewise linear fuzzy numbers; mathematics</PackageTags>
@@ -21,9 +21,15 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="FuzzyNumbers\" />
     <Folder Include="Intervals\" />
