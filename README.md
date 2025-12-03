@@ -5,7 +5,7 @@ An open-source library for performing basic operations with fuzzy numbers. It su
 
 The library is written in C# and targets .NET Standard 2.0, making it compatible with both modern .NET versions and older .NET Framework applications.
 
-The library is available as a [NuGet package Holecek.FuzzyMath](https://www.nuget.org/packages/Holecek.FuzzyMath). It is currently a pre-release version.
+The library is available as a [NuGet package Holecek.FuzzyMath](https://www.nuget.org/packages/Holecek.FuzzyMath).
 
 # Usage
 ## Create a fuzzy number
