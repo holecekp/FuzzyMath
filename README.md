@@ -29,16 +29,20 @@ var interval = new FuzzyNumber(5, 6);
 var crisp = new FuzzyNumber(7);
 ```
 
-Another way to create a fuzzy number is to provide a **list of α-cuts** in order from the support to the kernel:
+Another way to create a fuzzy number is to provide a **list of α-cuts** in order from the support to the kernel.
+To define a valid fuzzy number, the list of α-cuts must contain at least two items, and each α-cut must be a subinterval of the previous one.
+
+**Example:** A piecewise linear fuzzy number `A` defined by 3 α-cuts can be created with the following code:
 ```csharp
-var fuzzyNumber = new FuzzyNumber(
+var A = new FuzzyNumber(
 [
-    new Interval(0, 7),
-    new Interval(1, 6),
-    new Interval(3, 4)
+    new Interval(0, 7), // the support
+    new Interval(1, 6), // 0.5-cut
+    new Interval(3, 4)  // the kernel (1-cut)
 ]);
 ```
-To define a valid fuzzy number, the list of α-cuts must contain at least two items, and each α-cut must be a subinterval of the previous one.
+<img width="430" height="258" alt="Image of the fuzzy number from the example" src="https://github.com/user-attachments/assets/524ca814-603a-4780-8751-df6042c192af" />
+
 
 ## Basic methods
 
