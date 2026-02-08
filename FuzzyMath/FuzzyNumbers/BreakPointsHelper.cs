@@ -26,9 +26,23 @@ internal static class BreakPointsHelper
 
     internal static double[] AlphaCutsToBreakPoints(IList<Interval> alphaCuts)
     {
-        int breakPointsCount = alphaCuts.Count * 2;
-        var breakPoints = new double[breakPointsCount];
+        if (alphaCuts.Count == 2 && alphaCuts[0].Min == alphaCuts[1].Min && alphaCuts[0].Max == alphaCuts[1].Max)
+        {
+            return alphaCuts[0].Size == 0 ?
+                new double[] { alphaCuts[0].Min } :
+                new double[] { alphaCuts[0].Min, alphaCuts[0].Max };
+        }
 
+        int breakPointsCount = alphaCuts.Count * 2;
+
+        if (alphaCuts.Last().Size == 0)
+        {
+            // Conventions - if the kernel is only a single element, don't repeat the break point.
+            // For example, a triangular fuzzy number is expressed as 1, 2, 3 instead of 1, 2, 2, 3
+            breakPointsCount--;
+        }
+
+        var breakPoints = new double[breakPointsCount];
         for (int i = 0; i < alphaCuts.Count; i++)
         {
             breakPoints[i] = alphaCuts[i].Min;
