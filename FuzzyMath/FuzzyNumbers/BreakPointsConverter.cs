@@ -2,13 +2,13 @@
 
 namespace Holecek.FuzzyMath.FuzzyNumbers;
 
-internal static class BreakPointsHelper
+public static class BreakPointsConverter
 {
-    internal static Interval[] BreakPointsToAlphaCuts(IList<double> breakPoints)
+    public static Interval[] ConvertToAlphaCuts(IList<double> breakPoints)
     {
         if (breakPoints.Count == 1 || breakPoints.Count == 2)
         {
-            return BreakPointsToAlphaCuts(new double[] { breakPoints.First(), breakPoints.First(), breakPoints.Last(), breakPoints.Last() });
+            return ConvertToAlphaCuts(new double[] { breakPoints.First(), breakPoints.First(), breakPoints.Last(), breakPoints.Last() });
         }
 
         int alphacutsCount = (int)Math.Ceiling(breakPoints.Count / 2.0);
@@ -24,7 +24,7 @@ internal static class BreakPointsHelper
         return alphaCuts;
     }
 
-    internal static double[] AlphaCutsToBreakPoints(IList<Interval> alphaCuts)
+    public static double[] ConvertFromAlphaCuts(IList<Interval> alphaCuts)
     {
         if (alphaCuts.Count == 2 && alphaCuts[0].Min == alphaCuts[1].Min && alphaCuts[0].Max == alphaCuts[1].Max)
         {
