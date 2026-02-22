@@ -104,4 +104,97 @@ public class BreakPointsConverterTests
 
         CollectionAssert.AreEqual(expectedBreakPoints, breakPoints);
     }
+
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_CrispNumbers()
+    {
+        var breakPoints = new double[] { 5 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(5, 5),
+            new Interval(5, 5)
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_Intervals()
+    {
+        var breakPoints = new double[] { 5, 7 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(5, 7),
+            new Interval(5, 7)
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_TriangularFuzzyNumbers()
+    {
+        var breakPoints = new double[] { 5, 7, 9 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(5, 9),
+            new Interval(7, 7)
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_TrapezoidalFuzzyNumbers()
+    {
+        var breakPoints = new double[] { 5, 7, 9, 10 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(5, 10),
+            new Interval(7, 9)
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_EvenNumberOfBreakPoints()
+    {
+        var breakPoints = new double[] { 1, 4, 5, 7, 9, 10 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(1, 10),
+            new Interval(4, 9),
+            new Interval(5, 7),
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
+
+    [TestMethod]
+    public void ConvertToAlphaCuts_OddNumberOfBreakPoints()
+    {
+        var breakPoints = new double[] { 1, 4, 6, 9, 10 };
+        var expectedAlphaCuts = new Interval[]
+        {
+            new Interval(1, 10),
+            new Interval(4, 9),
+            new Interval(6, 6),
+        };
+
+        var actualAlphaCuts = BreakPointsConverter.ConvertToAlphaCuts(breakPoints);
+
+        CollectionAssert.AreEqual(expectedAlphaCuts, actualAlphaCuts);
+    }
 }
