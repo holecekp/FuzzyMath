@@ -177,3 +177,6 @@ However, the method has another overload, that takes the number of α-cuts for t
 The classes related to intervals are found in the `Holecek.FuzzyMath.Intervals` namespace. The `Interval` class represents a closed interval and is primarily used in this library to represent the α-cut of a fuzzy number.
 
 The `Min` and `Max` properties represent the lower and upper bounds of the interval. The arithmetic operators `+`, `-`, `*`, and `/` are overloaded, allowing for easy interval arithmetic in a similar way to the fuzzy numbers described earlier.
+
+# Sample
+You can find [a sample repository on Github](https://github.com/holecekp/FuzzyNumbers.Blazor) that demonstrates how to use this library in practice. It's a very simple Blazor WASM site that validates and parses the fuzzy number entered by the user and draws it in a form of a graph.
