@@ -7,6 +7,13 @@ The library is written in C# and targets .NET Standard 2.0, making it compatible
 
 The library is available as a [NuGet package Holecek.FuzzyMath](https://www.nuget.org/packages/Holecek.FuzzyMath).
 
+## A sample project – see the library in action
+You can find [a sample repository on Github](https://github.com/holecekp/FuzzyNumbers.Blazor) that demonstrates the usage of this library in practice. It's a simple Blazor WebAssembly project that just adds two fuzzy numbers. Its goal isn't to focus on complex calculations. Instead, it demonstrates how to parse fuzzy numbers entered by the users, validate them, and present the resulting fuzzy number to the user in the form of a graph. All of these tasks are essentail for using fuzzy numbers in real-world applications. The sample GitHub repository contains besides the source code also a more detailed description how these tasks were accomplished.
+
+You also can try the sample application live at: [fuzzymath.holecekp.eu](https://fuzzymath.holecekp.eu)
+
+<img width="400" alt="Screenshot of the site where this project is running" src="https://github.com/user-attachments/assets/66025605-3aad-4f3a-a8c5-e102f5b05f07" />
+
 # Usage
 ## Create a fuzzy number
 
@@ -177,6 +184,3 @@ However, the method has another overload, that takes the number of α-cuts for t
 The classes related to intervals are found in the `Holecek.FuzzyMath.Intervals` namespace. The `Interval` class represents a closed interval and is primarily used in this library to represent the α-cut of a fuzzy number.
 
 The `Min` and `Max` properties represent the lower and upper bounds of the interval. The arithmetic operators `+`, `-`, `*`, and `/` are overloaded, allowing for easy interval arithmetic in a similar way to the fuzzy numbers described earlier.
-
-# Sample
-You can find [a sample repository on Github](https://github.com/holecekp/FuzzyNumbers.Blazor) that demonstrates how to use this library in practice. It's a very simple Blazor WASM site that validates and parses the fuzzy number entered by the user and draws it in a form of a graph.
