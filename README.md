@@ -16,7 +16,7 @@ In addition to the source code, the sample repository also includes a more detai
 
 You also can try the sample application live at: [fuzzymath.holecekp.eu](https://fuzzymath.holecekp.eu)
 
-<img width="400" alt="Screenshot of the site where the sample project is running" src="https://github.com/user-attachments/assets/66025605-3aad-4f3a-a8c5-e102f5b05f07" />
+<img width="400" alt="Screenshot of the site where the sample project is running" src="https://github.com/user-attachments/assets/ae44cd08-c622-4371-ab5d-bf61941da965" />
 
 # Usage
 ## Create a fuzzy number
